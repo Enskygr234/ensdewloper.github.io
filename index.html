@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ENS Developer</title>
+  <meta name="theme-color" content="#071829">
+  <meta name="description" content="ENS Developer - kişisel site">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    /* Genel ayarlar */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background: radial-gradient(circle at top, #050b16 0%, #0b1528 100%);
+      color: #e4e4e4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+    }
+
+    .container {
+      background: rgba(10, 20, 40, 0.8);
+      border-radius: 20px;
+      padding: 50px 70px;
+      box-shadow: 0 0 25px rgba(0, 255, 255, 0.25), 0 0 60px rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      max-width: 600px;
+      width: 90%;
+    }
+
+    h1 {
+      color: #00e6ff;
+      font-size: 2.2rem;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+      text-shadow: 0 0 15px #00e6ff;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin: 25px 0;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 10px 20px;
+      border: 1px solid #00e6ff;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px transparent;
+    }
+
+    nav a:hover {
+      background: #00e6ff;
+      color: #071829;
+      box-shadow: 0 0 15px #00e6ff, 0 0 30px #00e6ff;
+      transform: scale(1.05);
+    }
+
+    p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    h3 {
+      color: #00e6ff;
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+      text-shadow: 0 0 10px #00e6ff;
+    }
+
+    a.email {
+      color: #00e6ff;
+      text-decoration: none;
+    }
+
+    a.email:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      margin-top: 25px;
+      font-size: 0.8rem;
+      color: #ccc;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 35px;
+      }
+      nav a {
+        font-size: 0.9rem;
+        padding: 8px 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1><i class="fa-solid fa-code"></i> ENS DEVELOPER</h1>
+
+    <nav aria-label="Ana menü">
+      
+      <a href="hakkımda.html"><i class="fa-solid fa-user"></i> Hakkımda</a>
+      <a href="oyunlar.html"><i class="fa-solid fa-gamepad"></i> Oyunlar</a>
+      <a href="tablo.html"><i class="fa-solid fa-table"></i> Tablo</a>
+    </nav>
+
+    <p>Bu site <strong>ENS Developer</strong> tarafından yapılmış ve yayınlanmaktadır.</p>
+
+    <h3>📩 İletişim</h3>
+    <p>Email: <a class="email" href="mailto:ensygk115@gmail.com">ensygk115@gmail.com</a></p>
+
+    <footer>© 2025 ENS Developer. All rights reserved.</footer>
+  </div>
+</body>
+</html>

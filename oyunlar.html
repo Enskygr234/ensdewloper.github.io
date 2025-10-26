@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Oyunlar - ENS Developer</title>
+  <meta name="theme-color" content="#041121">
+  <style>
+    :root {
+      --bg: #040b17;
+      --card: #0b162a;
+      --accent: #00d9ff;
+      --text: #e6f1ff;
+      --muted: #8fa1bf;
+      --border: rgba(255,255,255,0.08);
+      font-family: "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      padding: 30px 10px;
+      background: #06152d;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+    }
+
+    header h1 {
+      color: var(--accent);
+      letter-spacing: 2px;
+      margin: 0;
+      font-size: 2.3rem;
+    }
+
+    nav {
+      margin-top: 14px;
+    }
+
+    nav a {
+      color: var(--text);
+      text-decoration: none;
+      padding: 8px 18px;
+      border-radius: 10px;
+      margin: 0 6px;
+      background: rgba(255,255,255,0.05);
+      transition: all .25s;
+    }
+
+    nav a:hover {
+      background: var(--accent);
+      color: #000;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+      gap: 22px;
+      padding: 30px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .game-card {
+      background: var(--card);
+      padding: 18px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+      transition: transform .3s ease, box-shadow .3s ease;
+    }
+
+    .game-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+    }
+
+    .game-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    .button {
+      background: var(--accent);
+      border: none;
+      color: #000;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all .2s;
+    }
+
+    .button:hover { opacity: 0.85; transform: scale(1.05); }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .cell {
+      background: rgba(255,255,255,0.04);
+      padding: 20px;
+      text-align: center;
+      font-size: 1.6rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background .25s;
+    }
+
+    .cell:hover { background: rgba(0,217,255,0.2); }
+
+    canvas {
+      background: #061224;
+      border-radius: 10px;
+      display: block;
+      margin: 10px auto;
+    }
+
+    .small { font-size: .9rem; color: var(--muted); }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: var(--muted);
+      font-size: .9rem;
+      border-top: 1px solid var(--border);
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🎮 ENS DEVELOPER</h1>
+    <nav>
+      <a href="index.html">Anasayfa</a>
+      <a href="hakkımda.html">Hakkımda</a>
+      <a href="mac.html">Mac Linkleri</a>
+    </nav>
+  </header>
+
+  <main class="games-grid">
+    <!-- Tic Tac Toe -->
+    <section class="game-card" id="tictactoe">
+      <div class="game-title">
+        <span>Tic Tac Toe</span>
+        <button class="button" id="ttt-reset">Yenile</button>
+      </div>
+      <div class="board" id="ttt-board"></div>
+      <div class="small">Sıra: <span id="ttt-turn">X</span></div>
+    </section>
+
+    <!-- Taş Kağıt Makas -->
+    <section class="game-card" id="rps">
+      <div class="game-title">
+        <span>Taş Kağıt Makas</span>
+        <button class="button" id="rps-reset">Sıfırla</button>
+      </div>
+      <div class="controls">
+        <button class="button" data-move="rock">Taş</button>
+        <button class="button" data-move="paper">Kâğıt</button>
+        <button class="button" data-move="scissors">Makas</button>
+      </div>
+      <p class="small">Bilgisayar: <span id="rps-comp">-</span> — Sonuç: <strong id="rps-result">-</strong></p>
+    </section>
+
+    <!-- Memory -->
+    <section class="game-card" id="memory">
+      <div class="game-title">
+        <span>Memory (Eşleştirme)</span>
+        <button class="button" id="mem-reset">Yenile</button>
+      </div>
+      <div id="mem-board" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px"></div>
+      <p class="small">Eşleşenler: <span id="mem-score">0</span>/8</p>
+    </section>
+
+    <!-- Snake -->
+    <section class="game-card" id="snake">
+      <div class="game-title">
+        <span>Yılan (Snake)</span>
+        <div>
+          <button class="button" id="snake-start">Başlat</button>
+          <button class="button" id="snake-reset">Yenile</button>
+        </div>
+      </div>
+      <canvas id="snake-canvas" width="320" height="240"></canvas>
+      <p class="small">Yön tuşlarıyla kontrol et. Skor: <span id="snake-score">0</span></p>
+    </section>
+
+    <!-- Pong -->
+    <section class="game-card" id="pong">
+      <div class="game-title">
+        <span>Pong</span>
+        <div>
+          <button class="button" id="pong-start">Başlat</button>
+          <button class="button" id="pong-reset">Yenile</button>
+        </div>
+      </div>
+      <canvas id="pong-canvas" width="360" height="200"></canvas>
+      <p class="small">W/S : Sol paddle — Bilgisayar sağ paddle. Skor: <span id="pong-score">0 - 0</span></p>
+    </section>
+  </main>
+
+  <footer>
+    © 2025 ENS Developer — Tüm hakları saklıdır.
+  </footer>
+
+  <script>
+    /* ---- Tic Tac Toe ---- */
+    (()=>{const b=document.getElementById("ttt-board"),t=document.getElementById("ttt-turn"),r=document.getElementById("ttt-reset");let a=Array(9).fill(null),c="X",o=false;function e(){b.innerHTML="";for(let i=0;i<9;i++){const d=document.createElement("div");d.className="cell";d.textContent=a[i]||"";d.onclick=()=>{if(o||a[i])return;a[i]=c;c=c==="X"?"O":"X";f();e();};b.appendChild(d);}t.textContent=c}function f(){const w=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];for(const [x,y,z]of w){if(a[x]&&a[x]===a[y]&&a[x]===a[z]){o=true;alert("Kazanan: "+a[x]);return}}if(a.every(x=>x)){o=true;alert("Berabere!")}}r.onclick=()=>{a=Array(9).fill(null);c="X";o=false;e()};e();})();
+
+    /* ---- RPS ---- */
+    (()=>{const b=document.querySelectorAll("#rps .button[data-move]"),c=document.getElementById("rps-comp"),r=document.getElementById("rps-result"),s=document.getElementById("rps-reset");function cpu(){return["rock","paper","scissors"][Math.floor(Math.random()*3)]}function win(p,k){if(p===k)return"Berabere";if((p==="rock"&&k==="scissors")||(p==="paper"&&k==="rock")||(p==="scissors"&&k==="paper"))return"Kazandın";return"Kaybettin"}b.forEach(x=>x.onclick=()=>{const p=x.dataset.move,k=cpu();c.textContent=k;r.textContent=win(p,k)});s.onclick=()=>{c.textContent="-";r.textContent="-"}})();
+
+    /* ---- Memory ---- */
+    (()=>{const b=document.getElementById("mem-board"),s=document.getElementById("mem-score"),r=document.getElementById("mem-reset");let v=[],f=null,p=0;function init(){v=["🍎","🍌","🍇","🍉","🍓","🍒","🍍","🥝"];v=v.concat(v).sort(()=>Math.random()-0.5);b.innerHTML="";p=0;s.textContent="0";for(let i=0;i<16;i++){const d=document.createElement("div");d.className="cell";d.textContent="";d.dataset.i=i;d.onclick=flip;b.appendChild(d)}}function flip(e){const i=e.currentTarget.dataset.i,d=b.children[i];if(d.classList.contains("open")||d.classList.contains("matched"))return;d.classList.add("open");d.textContent=v[i];if(!f){f={i,d};return}if(f.i===i)return;if(v[f.i]===v[i]){f.d.classList.add("matched");d.classList.add("matched");p++;s.textContent=p;if(p===8)alert("Tebrikler — Hepsini buldun!")}else{setTimeout(()=>{f.d.classList.remove("open");d.classList.remove("open");f.d.textContent="";d.textContent="";f=null},700);return}f=null}r.onclick=init;init();})();
+
+    /* ---- Snake ---- */
+    (()=>{const c=document.getElementById("snake-canvas"),ctx=c.getContext("2d"),s=document.getElementById("snake-start"),r=document.getElementById("snake-reset"),sc=document.getElementById("snake-score");let W=c.width,H=c.height,S=12,snake,dir,food,score,timer;function rand(){return{x:Math.floor(Math.random()*(W/S)),y:Math.floor(Math.random()*(H/S))}}function place(){food=rand()}function init(){snake=[{x:5,y:5},{x:4,y:5},{x:3,y:5}];dir={x:1,y:0};score=0;sc.textContent=0;place();draw()}function draw(){ctx.clearRect(0,0,W,H);ctx.fillStyle="#00d9ff";snake.forEach(p=>ctx.fillRect(p.x*S,p.y*S,S-1,S-1));ctx.fillStyle="#ef4444";ctx.fillRect(food.x*S,food.y*S,S-1,S-1)}function step(){const h={x:snake[0].x+dir.x,y:snake[0].y+dir.y};if(h.x<0||h.x>=W/S||h.y<0||h.y>=H/S||snake.some(p=>p.x===h.x&&p.y===h.y)){clearInterval(timer);alert("Oyun bitti — Skor: "+score);return}snake.unshift(h);if(h.x===food.x&&h.y===food.y){score++;sc.textContent=score;place()}else snake.pop();draw()}document.addEventListener("keydown",e=>{if(e.key==="ArrowUp"&&dir.y===0)dir={x:0,y:-1};if(e.key==="ArrowDown"&&dir.y===0)dir={x:0,y:1};if(e.key==="ArrowLeft"&&dir.x===0)dir={x:-1,y:0};if(e.key==="ArrowRight"&&dir.x===0)dir={x:1,y:0}});s.onclick=()=>{clearInterval(timer);timer=setInterval(step,120)};r.onclick=()=>{clearInterval(timer);init()};init();})();
+
+    /* ---- Pong ---- */
+    (()=>{const c=document.getElementById("pong-canvas"),ctx=c.getContext("2d"),s=document.getElementById("pong-start"),r=document.getElementById("pong-reset"),sc=document.getElementById("pong-score");let W=c.width,H=c.height,L=(H-50)/2,R=(H-50)/2,ball={x:W/2,y:H/2,vx:3,vy:2,r:6},score=[0,0],timer,u=false,d=false;function draw(){ctx.clearRect(0,0,W,H);ctx.fillStyle="#fff";ctx.fillRect(10,L,8,50);ctx.fillRect(W-18,R,8,50);ctx.beginPath();ctx.arc(ball.x,ball.y,ball.r,0,Math.PI*2);ctx.fill();}function step(){if(ball.y>R+25)R+=2;else R-=2;if(u)L-=4;if(d)L+=4;L=Math.max(0,Math.min(H-50,L));R=Math.max(0,Math.min(H-50,R));ball.x+=ball.vx;ball.y+=ball.vy;if(ball.y<ball.r||ball.y>H-ball.r)ball.vy*=-1;if(ball.x-ball.r<=18&&ball.y>L&&ball.y<L+50)ball.vx*=-1;if(ball.x+ball.r>=W-18&&ball.y>R&&ball.y<R+50)ball.vx*=-1;if(ball.x<0){score[1]++;resetBall()}if(ball.x>W){score[0]++;resetBall()}sc.textContent=score[0]+" - "+score[1];draw()}function resetBall(){ball.x=W/2;ball.y=H/2;ball.vx=(Math.random()>0.5?3:-3);ball.vy=(Math.random()*4-2)}document.addEventListener("keydown",e=>{if(e.key.toLowerCase()==="w")u=true;if(e.key.toLowerCase()==="s")d=true});document.addEventListener("keyup",e=>{if(e.key.toLowerCase()==="w")u=false;if(e.key.toLowerCase()==="s")d=false});s.onclick=()=>{clearInterval(timer);timer=setInterval(step,16)};r.onclick=()=>{clearInterval(timer);score=[0,0];sc.textContent="0 - 0";resetBall();draw()};resetBall();draw();})();
+  </script>
+</body>
+</html>

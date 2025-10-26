@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hakkımda - ENS Developer</title>
+  <meta name="theme-color" content="#071829">
+  <meta name="description" content="ENS Developer - Hakkımda Sayfası">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background: radial-gradient(circle at top, #050b16 0%, #0b1528 100%);
+      color: #e4e4e4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: rgba(10, 20, 40, 0.85);
+      border-radius: 20px;
+      padding: 50px 40px;
+      box-shadow: 0 0 25px rgba(0, 255, 255, 0.25), 0 0 60px rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      max-width: 700px;
+      width: 100%;
+    }
+
+    h1 {
+      color: #00e6ff;
+      font-size: 2rem;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+      text-shadow: 0 0 15px #00e6ff;
+    }
+
+    h3 {
+      color: #00e6ff;
+      margin: 20px 0 10px 0;
+      font-size: 1.2rem;
+      text-shadow: 0 0 10px #00e6ff;
+    }
+
+    p {
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 10px 20px;
+      border: 1px solid #00e6ff;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px transparent;
+    }
+
+    nav a:hover {
+      background: #00e6ff;
+      color: #071829;
+      box-shadow: 0 0 15px #00e6ff, 0 0 30px #00e6ff;
+      transform: scale(1.05);
+    }
+
+    a.email {
+      color: #00e6ff;
+      text-decoration: none;
+    }
+
+    a.email:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      margin-top: 25px;
+      font-size: 0.8rem;
+      color: #ccc;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 35px;
+      }
+      nav a {
+        font-size: 0.9rem;
+        padding: 8px 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1><i class="fa-solid fa-user"></i> Hakkımda</h1>
+
+    <nav aria-label="Alt menü">
+      <a href="index.html"><i class="fa-solid fa-house"></i> Ana Sayfa</a>
+      <a href="oyunlar.html"><i class="fa-solid fa-gamepad"></i> Oyunlar</a>
+      <a href="tablo.html"><i class="fa-solid fa-table"></i> Tablo</a>
+    </nav>
+
+    <h3>Merhaba! Ben ENS Developer</h3>
+    <p>Bilgisayar ve yazılım geliştirme konularına büyük bir ilgi duyan bir web geliştiricisiyim.  
+    Bu siteyi kendimi ifade etmek, projelerimi paylaşmak ve bilgi birikimimi göstermek amacıyla oluşturdum.</p>
+
+    <h3>Yeteneklerim</h3>
+    <p>
+      HTML, CSS, JavaScript, Web Tasarım, Temel Backend bilgisi, UX/UI tasarım.
+    </p>
+
+    <h3>Hedeflerim</h3>
+    <p>
+      Kendi yazılım projelerimi geliştirmek, açık kaynak topluluklarına katkıda bulunmak ve modern web teknolojilerinde uzmanlaşmak.
+    </p>
+
+    <h3>📩 İletişim</h3>
+    <p>Email: <a class="email" href="mailto:ensygk115@gmail.com">ensygk115@gmail.com</a></p>
+
+    <footer>© 2025 ENS Developer. All rights reserved.</footer>
+  </div>
+</body>
+</html>
