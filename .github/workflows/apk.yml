@@ -43,9 +43,9 @@ jobs:
         run: |
           cd apk/android/app/src/main/res
           rm -rf mipmap-anydpi-v26
-          for pair in mdpi:48 hdpi:72 xhdpi:96 xxhdpi:144 xxxhdpi:192; do
-            dir="mipmap-${pair%%:*}"; size="${pair##*:}"
-            convert "$GITHUB_WORKSPACE/tarifler/icons/icon-1024.png" -resize ${size}x${size} "$dir/ic_launcher.png"
+          for pair in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
+            dir="mipmap-$pair"
+            cp "$GITHUB_WORKSPACE/.github/android-icons/$pair.png" "$dir/ic_launcher.png"
             cp "$dir/ic_launcher.png" "$dir/ic_launcher_round.png"
           done
 
