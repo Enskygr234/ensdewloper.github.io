@@ -3,132 +3,438 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ENS Developer</title>
-  <meta name="theme-color" content="#071829">
-  <meta name="description" content="ENS Developer - kişisel site">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+  <title>ENS Developer · Projeler</title>
+  <meta name="theme-color" content="#06101f">
+  <meta name="description" content="ENS Developer: kışı seven bir geliştiricinin oyunları, telefon uygulamaları, Windows araçları ve kar yağan web sayfaları.">
+  <link rel="icon" href="ayaz-feneri/icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* Genel ayarlar */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    :root {
+      --bg: #06101f;
+      --bg2: #0b1a33;
+      --card: rgba(16, 32, 58, .72);
+      --card-solid: #10203a;
+      --line: rgba(160, 205, 255, .14);
+      --text: #e9f3ff;
+      --muted: #94abc6;
+      --ice: #8ecae6;
+      --ice-strong: #00d9ff;
+      --warm: #f2a33a;
+      --android: #3ddc84;
+      --radius: 18px;
     }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { background: #06101f; }
+    html { scroll-behavior: smooth; }
     body {
-      font-family: "Poppins", sans-serif;
-      background: radial-gradient(circle at top, #050b16 0%, #0b1528 100%);
-      color: #e4e4e4;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      font-family: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
+      background-color: var(--bg);
+      background-image: radial-gradient(1200px 600px at 70% -10%, #1d3a63 0%, transparent 60%), linear-gradient(180deg, var(--bg2) 0, var(--bg) 900px);
+      background-repeat: no-repeat;
+      color: var(--text);
       min-height: 100vh;
-      text-align: center;
+      line-height: 1.55;
+      overflow-x: hidden;
     }
+    a { color: inherit; }
+    #kar { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .wrap { position: relative; z-index: 1; max-width: 1120px; margin: 0 auto; padding: 0 18px; }
 
-    .container {
-      background: rgba(10, 20, 40, 0.8);
-      border-radius: 20px;
-      padding: 50px 70px;
-      box-shadow: 0 0 25px rgba(0, 255, 255, 0.25), 0 0 60px rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(10px);
-      max-width: 600px;
-      width: 90%;
+    /* Üst menü */
+    .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 0; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800; letter-spacing: .5px; font-size: 1.05rem; }
+    .logo span { color: var(--ice-strong); }
+    .logo .flake { font-size: 1.4rem; display: inline-block; animation: don 12s linear infinite; }
+    @keyframes don { to { transform: rotate(360deg); } }
+    .top nav { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+    .top nav a { text-decoration: none; font-size: .9rem; padding: 7px 12px; border-radius: 999px; color: var(--muted); transition: .2s; }
+    .top nav a:hover { color: var(--text); background: rgba(255,255,255,.07); }
+
+    /* Giriş */
+    .hero { padding: 56px 0 40px; display: grid; grid-template-columns: 1.3fr .9fr; gap: 40px; align-items: center; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: .82rem; color: var(--ice); background: rgba(142,202,230,.1); border: 1px solid var(--line); padding: 6px 12px; border-radius: 999px; }
+    .hero h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); line-height: 1.1; margin: 16px 0 14px; font-weight: 800; }
+    .hero h1 em { font-style: normal; background: linear-gradient(90deg, #bfe6ff, var(--ice-strong)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero p.lead { color: var(--muted); font-size: 1.05rem; max-width: 540px; }
+    .cta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 26px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 600; font-size: .92rem; padding: 11px 18px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255,255,255,.06); transition: transform .15s, background .2s, box-shadow .2s; white-space: nowrap; }
+    .btn:hover { transform: translateY(-2px); background: rgba(255,255,255,.11); }
+    .btn.warm { background: var(--warm); color: #2a1a08; border-color: transparent; box-shadow: 0 8px 24px rgba(242,163,58,.25); }
+    .btn.warm:hover { background: #ffb44f; }
+    .btn.android { background: var(--android); color: #062a14; border-color: transparent; }
+    .btn.small { padding: 8px 12px; font-size: .83rem; border-radius: 10px; }
+
+    /* Nardugan sayacı */
+    .sayac { background: var(--card); border: 1px solid var(--line); border-radius: 24px; padding: 26px; text-align: center; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); position: relative; overflow: hidden; }
+    .sayac::before { content: ""; position: absolute; inset: -40% -20% auto auto; width: 220px; height: 220px; background: radial-gradient(circle, rgba(255,215,120,.35), transparent 65%); }
+    .sayac .gun { font-size: 4.2rem; font-weight: 800; line-height: 1; margin: 10px 0 4px; position: relative; }
+    .sayac .etiket { color: var(--muted); font-size: .9rem; position: relative; }
+    .sayac .bar { height: 8px; background: rgba(255,255,255,.08); border-radius: 99px; margin: 18px 0 8px; overflow: hidden; position: relative; }
+    .sayac .bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--ice), #fff3c4); border-radius: 99px; transition: width 1.2s ease; }
+    .sayac small { color: var(--muted); font-size: .78rem; position: relative; }
+    .stats { display: flex; justify-content: center; gap: 22px; margin-top: 18px; position: relative; }
+    .stats b { display: block; font-size: 1.4rem; }
+    .stats span { font-size: .75rem; color: var(--muted); }
+
+    /* Projeler */
+    section { padding: 34px 0; }
+    .baslik { display: flex; align-items: end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+    .baslik h2 { font-size: 1.7rem; font-weight: 700; }
+    .baslik p { color: var(--muted); font-size: .92rem; }
+    .filtre { display: flex; gap: 8px; flex-wrap: wrap; }
+    .filtre button { font: inherit; font-size: .85rem; font-weight: 500; color: var(--muted); background: rgba(255,255,255,.05); border: 1px solid var(--line); padding: 7px 14px; border-radius: 999px; cursor: pointer; transition: .2s; }
+    .filtre button:hover { color: var(--text); }
+    .filtre button.on { background: var(--ice-strong); color: #04202b; border-color: transparent; }
+
+    .one-cikan { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-bottom: 18px; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .kart { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; transition: transform .25s, border-color .25s, box-shadow .25s; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+    .kart:hover { transform: translateY(-4px); border-color: rgba(142,202,230,.35); box-shadow: 0 18px 40px rgba(0,0,0,.35); }
+    .kart.gizli { display: none; }
+    .kapak { text-decoration: none; position: relative; aspect-ratio: 16 / 9; display: grid; place-items: center; overflow: hidden; }
+    .kapak img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; z-index: 1; }
+    .kapak .rozet { z-index: 2; }
+    .kapak .emoji { font-size: 3.6rem; filter: drop-shadow(0 6px 14px rgba(0,0,0,.35)); transition: transform .3s; }
+    .kart:hover .kapak .emoji { transform: scale(1.12) rotate(-4deg); }
+    .kapak .rozet { position: absolute; top: 10px; left: 10px; display: flex; gap: 6px; }
+    .kapak .rozet span { font-size: .7rem; font-weight: 600; padding: 3px 9px; border-radius: 99px; background: rgba(6,16,31,.75); color: var(--text); backdrop-filter: blur(4px); }
+    .kapak .rozet span.yeni { background: var(--warm); color: #2a1a08; }
+    .icerik { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+    .icerik h3 { font-size: 1.12rem; font-weight: 700; }
+    .icerik p { color: var(--muted); font-size: .9rem; flex: 1; }
+    .dil { font-size: .75rem; color: var(--ice); display: flex; align-items: center; gap: 6px; }
+    .dil::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--c, var(--ice)); }
+    .butonlar { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+    .one-cikan .kapak { aspect-ratio: 16 / 8; }
+    .one-cikan .icerik h3 { font-size: 1.3rem; }
+
+    /* Kapak çizimleri (görseli olmayan projeler için) */
+    .k-kizak { background: linear-gradient(160deg, #1b3b6f, #6aa9d8 70%, #eaf6ff 70%); }
+    .k-nardugan { background: radial-gradient(circle at 50% 110%, #ffd27a 0 18%, #f2a35e 30%, #3a4f86 65%, #0b1a33); }
+    .k-kar { background: linear-gradient(160deg, #0e2a47, #2e6b9f); }
+    .k-js { background: linear-gradient(160deg, #1d1d10, #4a4515); }
+    .k-ayaz { background: linear-gradient(160deg, #0a0f18, #13263d); font-family: ui-monospace, Menlo, Consolas, monospace; }
+    .k-ayaz code { color: #9fe3a8; font-size: .9rem; text-align: left; line-height: 1.6; }
+    .k-masa { background: linear-gradient(160deg, #0f3a66, #1a6fb3); }
+    .k-kilit { background: linear-gradient(160deg, #1a1030, #3b2a6b); }
+    .k-oyun { background: linear-gradient(160deg, #0b2a2a, #127a7a); }
+    .k-tarif { background: linear-gradient(160deg, #3d1a0b, #c2410c); }
+
+    /* Hakkımda / iletişim */
+    .alt { display: grid; grid-template-columns: 1.2fr 1fr; gap: 18px; }
+    .kutu { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; }
+    .kutu h2 { font-size: 1.3rem; margin-bottom: 10px; }
+    .kutu p { color: var(--muted); font-size: .93rem; }
+    .araclar { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .araclar span { font-size: .8rem; padding: 5px 11px; border-radius: 99px; border: 1px solid var(--line); background: rgba(255,255,255,.04); }
+    footer { text-align: center; color: var(--muted); font-size: .82rem; padding: 34px 0 40px; }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; padding-top: 28px; gap: 26px; }
+      .grid { grid-template-columns: repeat(2, 1fr); }
+      .alt { grid-template-columns: 1fr; }
     }
-
-    h1 {
-      color: #00e6ff;
-      font-size: 2.2rem;
-      margin-bottom: 20px;
-      letter-spacing: 1px;
-      text-shadow: 0 0 15px #00e6ff;
+    @media (max-width: 620px) {
+      .top { flex-direction: column; align-items: flex-start; }
+      .top nav { justify-content: flex-start; margin-left: -10px; }
+      .one-cikan, .grid { grid-template-columns: 1fr; }
+      .sayac .gun { font-size: 3.4rem; }
     }
-
-    nav {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 15px;
-      margin: 25px 0;
-    }
-
-    nav a {
-      color: #fff;
-      text-decoration: none;
-      font-size: 1rem;
-      padding: 10px 20px;
-      border: 1px solid #00e6ff;
-      border-radius: 10px;
-      transition: all 0.3s ease;
-      box-shadow: 0 0 10px transparent;
-    }
-
-    nav a:hover {
-      background: #00e6ff;
-      color: #071829;
-      box-shadow: 0 0 15px #00e6ff, 0 0 30px #00e6ff;
-      transform: scale(1.05);
-    }
-
-    p {
-      font-size: 0.95rem;
-      line-height: 1.6;
-      margin-bottom: 20px;
-    }
-
-    h3 {
-      color: #00e6ff;
-      margin-bottom: 8px;
-      font-size: 1.1rem;
-      text-shadow: 0 0 10px #00e6ff;
-    }
-
-    a.email {
-      color: #00e6ff;
-      text-decoration: none;
-    }
-
-    a.email:hover {
-      text-decoration: underline;
-    }
-
-    footer {
-      margin-top: 25px;
-      font-size: 0.8rem;
-      color: #ccc;
-    }
-
-    @media (max-width: 600px) {
-      .container {
-        padding: 35px;
-      }
-      nav a {
-        font-size: 0.9rem;
-        padding: 8px 16px;
-      }
+    @media (prefers-reduced-motion: reduce) {
+      .logo .flake { animation: none; }
+      #kar { display: none; }
+      * { transition: none !important; }
     }
   </style>
 </head>
-
 <body>
-  <div class="container">
-    <h1><i class="fa-solid fa-code"></i> ENS DEVELOPER</h1>
+  <canvas id="kar" aria-hidden="true"></canvas>
 
-    <nav aria-label="Ana menü">
-      
-      <a href="hakkımda.html"><i class="fa-solid fa-user"></i> Hakkımda</a>
-      <a href="oyunlar.html"><i class="fa-solid fa-gamepad"></i> Oyunlar</a>
-      <a href="ayaz-feneri/"><i class="fa-solid fa-fire"></i> Ayaz Ata'nın Feneri</a>
-      <a href="tarifler/"><i class="fa-solid fa-utensils"></i> Yemek Tarifleri</a>
-    </nav>
+  <div class="wrap">
+    <header class="top">
+      <a class="logo" href="#"><span class="flake">❄</span> ENS <span>DEVELOPER</span></a>
+      <nav aria-label="Ana menü">
+        <a href="#projeler">Projeler</a>
+        <a href="oyunlar.html">Oyunlar</a>
+        <a href="hakkımda.html">Hakkımda</a>
+        <a href="#iletisim">İletişim</a>
+        <a href="https://github.com/Enskygr234">GitHub</a>
+      </nav>
+    </header>
 
-    <p>Bu site <strong>ENS Developer</strong> tarafından yapılmış ve yayınlanmaktadır.</p>
+    <div class="hero">
+      <div>
+        <span class="eyebrow">❄️ Kış gelir, kod yazılır</span>
+        <h1>Kışı seven bir <em>geliştirici</em></h1>
+        <p class="lead">Oyunlar, telefon uygulamaları, küçük Windows araçları ve kar yağan web sayfaları yapıyorum. Hepsi Türk masallarından, kıştan ve Nardugan'dan ilham alıyor.</p>
+        <div class="cta">
+          <a class="btn warm" href="#projeler">🎒 Projelere bak</a>
+          <a class="btn" href="ayaz-feneri/">🏮 Yeni oyunu oyna</a>
+        </div>
+      </div>
 
-    <h3>📩 İletişim</h3>
-    <p>Email: <a class="email" href="mailto:ensygk115@gmail.com">ensygk115@gmail.com</a></p>
+      <aside class="sayac" aria-label="Nardugan geri sayımı">
+        <div class="etiket">🌅 Nardugan'a (kış gündönümü)</div>
+        <div class="gun" id="gun">–</div>
+        <div class="etiket" id="gunYazi">gün kaldı</div>
+        <div class="bar"><i id="bar"></i></div>
+        <small id="tarih"></small>
+        <div class="stats">
+          <div><b id="projeSay">11</b><span>proje</span></div>
+          <div><b>2</b><span>Android APK</span></div>
+          <div><b>∞</b><span>kar tanesi</span></div>
+        </div>
+      </aside>
+    </div>
 
-    <footer>© 2025–2026 ENS Developer. All rights reserved.</footer>
+    <section id="projeler">
+      <div class="baslik">
+        <div>
+          <h2>Projelerim</h2>
+          <p>Oyna, indir ya da kaynak koduna göz at.</p>
+        </div>
+        <div class="filtre" role="group" aria-label="Projeleri filtrele">
+          <button class="on" data-f="hepsi">Hepsi</button>
+          <button data-f="oyun">🎮 Oyunlar</button>
+          <button data-f="telefon">📱 Telefon</button>
+          <button data-f="web">🌐 Web</button>
+          <button data-f="windows">🖥️ Windows</button>
+        </div>
+      </div>
+
+      <div class="one-cikan">
+        <article class="kart" data-t="oyun telefon web">
+          <a class="kapak" href="ayaz-feneri/">
+            <img src="ayaz-feneri/kapak.png" alt="Ayaz Ata'nın Feneri oyunundan bir sahne" loading="lazy">
+            <div class="rozet"><span class="yeni">YENİ</span><span>Oyun</span><span>Android</span></div>
+          </a>
+          <div class="icerik">
+            <h3>🏮 Ayaz Ata'nın Feneri</h3>
+            <p>Bir Nardugan masalı. Karakoncolos'un çaldığı üç yıldız parçasını topla, fenerin yeniden yansın. 3 bölüm, hikâye sahneleri ve Karakoncolos ile kapışma.</p>
+            <div class="dil" style="--c:#f7df1e">JavaScript · telefonda yan çevirerek oynanır</div>
+            <div class="butonlar">
+              <a class="btn warm small" href="ayaz-feneri/">▶ Oyna</a>
+              <a class="btn android small" href="https://github.com/Enskygr234/ensdewloper.github.io/releases/download/ayaz-feneri/AyazFeneri.apk">⬇ APK</a>
+              <a class="btn small" href="https://github.com/Enskygr234/ensdewloper.github.io/tree/main/ayaz-feneri">Kaynak kod</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="kart" data-t="oyun windows">
+          <a class="kapak k-kar" href="https://github.com/Enskygr234/son-kis">
+            <img src="https://raw.githubusercontent.com/Enskygr234/son-kis/HEAD/docs/baslik.png" alt="Son Kış oyununun başlık görseli" loading="lazy" onerror="this.remove()">
+            <span class="emoji">❄️</span>
+            <div class="rozet"><span>Oyun</span><span>Windows</span></div>
+          </a>
+          <div class="icerik">
+            <h3>❄️ Son Kış</h3>
+            <p>Gün üç gündür doğmuyor. Nar, koru fenerini alıp zirveye çıkıyor; yolda Karakoncolos, Şahmeran, Tepegöz ve Ayaz Ata'yla karşılaşıyor. Onları ısıtabilir ya da yakabilirsin.</p>
+            <div class="dil" style="--c:#512bd4">C# · .NET 8</div>
+            <div class="butonlar">
+              <a class="btn warm small" href="https://github.com/Enskygr234/son-kis/releases/latest">⬇ Windows için indir</a>
+              <a class="btn small" href="https://github.com/Enskygr234/son-kis">Kaynak kod</a>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="grid">
+        <article class="kart" data-t="telefon web">
+          <a class="kapak k-tarif" href="tarifler/"><span class="emoji">🍲</span><div class="rozet"><span class="yeni">YENİ</span><span>Android</span></div></a>
+          <div class="icerik">
+            <h3>Yemek Tarifleri</h3>
+            <p>12 hazır Türk tarifi, kişi sayısına göre hesaplanan malzemeler, adım zamanlayıcısı, favoriler. İnternetsiz çalışır.</p>
+            <div class="dil" style="--c:#f7df1e">JavaScript</div>
+            <div class="butonlar">
+              <a class="btn small" href="tarifler/">Aç</a>
+              <a class="btn android small" href="https://github.com/Enskygr234/ensdewloper.github.io/releases/latest">⬇ APK</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="kart" data-t="oyun web telefon">
+          <a class="kapak k-kizak" href="https://enskygr234.github.io/kizak/"><span class="emoji">🛷</span><div class="rozet"><span>Oyun</span></div></a>
+          <div class="icerik">
+            <h3>Kızak</h3>
+            <p>Sonsuz yokuş aşağı kızak oyunu. Telefonda da oynanır.</p>
+            <div class="dil" style="--c:#f7df1e">JavaScript</div>
+            <div class="butonlar">
+              <a class="btn small" href="https://enskygr234.github.io/kizak/">▶ Oyna</a>
+              <a class="btn small" href="https://github.com/Enskygr234/kizak">Kaynak kod</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="kart" data-t="oyun web">
+          <a class="kapak k-oyun" href="oyunlar.html"><span class="emoji">🎮</span><div class="rozet"><span>5 oyun</span></div></a>
+          <div class="icerik">
+            <h3>Tarayıcı oyunları</h3>
+            <p>Yılan, Pong, Tic Tac Toe, Taş Kâğıt Makas ve Eşleştirme. Hepsi tek sayfada.</p>
+            <div class="dil" style="--c:#e34f26">HTML / JavaScript</div>
+            <div class="butonlar"><a class="btn small" href="oyunlar.html">▶ Oyna</a></div>
+          </div>
+        </article>
+
+        <article class="kart" data-t="web">
+          <a class="kapak k-kar" href="https://enskygr234.github.io/kar-tanesi/">
+            <img src="https://raw.githubusercontent.com/Enskygr234/kar-tanesi/HEAD/docs/winterdeveloper.svg" alt="Winterdeveloper adına üretilmiş kar tanesi" loading="lazy" style="object-fit:contain;padding:18px" onerror="this.remove()">
+            <span class="emoji">✳️</span>
+          </a>
+          <div class="icerik">
+            <h3>Kar Tanesi</h3>
+            <p>Adını yaz, sana özel bir kar tanesi üretsin. Her isim farklı bir desen.</p>
+            <div class="dil" style="--c:#f7df1e">JavaScript</div>
+            <div class="butonlar">
+              <a class="btn small" href="https://enskygr234.github.io/kar-tanesi/">Aç</a>
+              <a class="btn small" href="https://github.com/Enskygr234/kar-tanesi">Kaynak kod</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="kart" data-t="web">
+          <a class="kapak k-nardugan" href="https://enskygr234.github.io/nardugan/"><span class="emoji">🌅</span></a>
+          <div class="icerik">
+            <h3>Nardugan</h3>
+            <p>Kış gündönümüne canlı geri sayım. Anı astronomik olarak hesaplar.</p>
+            <div class="dil" style="--c:#f7df1e">JavaScript</div>
+            <div class="butonlar">
+              <a class="btn small" href="https://enskygr234.github.io/nardugan/">Aç</a>
+              <a class="btn small" href="https://github.com/Enskygr234/nardugan">Kaynak kod</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="kart" data-t="web">
+          <a class="kapak k-js" href="https://enskygr234.github.io/kar-js/"><span class="emoji">🌨️</span></a>
+          <div class="icerik">
+            <h3>kar.js</h3>
+            <p>Web sayfana tek satırla kar yağdıran küçük bir kütüphane.</p>
+            <div class="dil" style="--c:#f7df1e">JavaScript</div>
+            <div class="butonlar">
+              <a class="btn small" href="https://enskygr234.github.io/kar-js/">Demo</a>
+              <a class="btn small" href="https://github.com/Enskygr234/kar-js">Kaynak kod</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="kart" data-t="windows">
+          <a class="kapak k-masa" href="https://github.com/Enskygr234/masaustu-kar"><span class="emoji">🖥️</span></a>
+          <div class="icerik">
+            <h3>Masaüstü Kar</h3>
+            <p>Windows masaüstüne kar yağdırır; tıklamaları engellemez, işini yapmaya devam edersin.</p>
+            <div class="dil" style="--c:#512bd4">C#</div>
+            <div class="butonlar">
+              <a class="btn small" href="https://github.com/Enskygr234/masaustu-kar/releases/latest">⬇ İndir</a>
+              <a class="btn small" href="https://github.com/Enskygr234/masaustu-kar">Kaynak kod</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="kart" data-t="windows">
+          <a class="kapak k-ayaz" href="https://github.com/Enskygr234/ayaz"><code>&gt; ayaz<br>❄ -3°C · kar yağışlı<br>Kar 2 gün sonra!</code></a>
+          <div class="icerik">
+            <h3>ayaz</h3>
+            <p>Terminalde hava durumu ve en önemli soru: "kar ne zaman?"</p>
+            <div class="dil" style="--c:#512bd4">C#</div>
+            <div class="butonlar">
+              <a class="btn small" href="https://github.com/Enskygr234/ayaz/releases/latest">⬇ İndir</a>
+              <a class="btn small" href="https://github.com/Enskygr234/ayaz">Kaynak kod</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="kart" data-t="windows">
+          <a class="kapak k-kilit" href="https://github.com/Enskygr234/GuvenlikKilidi"><span class="emoji">🔒</span></a>
+          <div class="icerik">
+            <h3>Güvenlik Kilidi</h3>
+            <p>PIN korumalı tam ekran kilit: hareket alarmı, telefona bildirim, saat ve hava durumu.</p>
+            <div class="dil" style="--c:#512bd4">C#</div>
+            <div class="butonlar"><a class="btn small" href="https://github.com/Enskygr234/GuvenlikKilidi">Kaynak kod</a></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="alt" id="iletisim">
+      <div class="kutu">
+        <h2>👋 Merhaba, ben ENS</h2>
+        <p>Kışı, karı ve Türk masallarını seviyorum; yaptığım her şeye biraz ayaz katıyorum. Oyunlarımda Karakoncolos'u, Ayaz Ata'yı ve Nardugan'ı yaşatmaya çalışıyorum.</p>
+        <div class="araclar">
+          <span>C#</span><span>.NET 8</span><span>JavaScript</span><span>HTML5</span><span>CSS3</span><span>SVG</span><span>Android</span><span>GitHub Actions</span>
+        </div>
+        <div class="butonlar" style="margin-top:16px"><a class="btn small" href="hakkımda.html">Hakkımda daha fazlası</a></div>
+      </div>
+      <div class="kutu">
+        <h2>📩 İletişim</h2>
+        <p>Bir fikrin, önerin ya da bulduğun bir hata mı var? Yaz bana.</p>
+        <div class="butonlar" style="margin-top:16px">
+          <a class="btn warm small" href="mailto:ensygk115@gmail.com">✉️ ensygk115@gmail.com</a>
+          <a class="btn small" href="https://github.com/Enskygr234">GitHub profilim</a>
+        </div>
+      </div>
+    </section>
+
+    <footer>© 2025–2026 ENS Developer · ❄️ Kış gelir, kod yazılır.</footer>
   </div>
+
+  <script>
+    // Nardugan geri sayımı
+    (function () {
+      const simdi = new Date();
+      let hedef = new Date(simdi.getFullYear(), 11, 21);
+      if (simdi > new Date(simdi.getFullYear(), 11, 22)) hedef = new Date(simdi.getFullYear() + 1, 11, 21);
+      const gunMs = 86400000;
+      const kalan = Math.max(0, Math.ceil((hedef - simdi) / gunMs));
+      const gun = document.getElementById("gun");
+      if (kalan === 0) { gun.textContent = "Bugün!"; document.getElementById("gunYazi").textContent = "Gün yeniden doğuyor 🌅"; }
+      else gun.textContent = kalan;
+      const gecen = 365 - kalan;
+      setTimeout(() => { document.getElementById("bar").style.width = Math.min(100, gecen / 365 * 100) + "%"; }, 200);
+      document.getElementById("tarih").textContent = hedef.toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric", weekday: "long" });
+      document.getElementById("projeSay").textContent = document.querySelectorAll(".kart").length;
+    })();
+
+    // Filtre
+    document.querySelectorAll(".filtre button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".filtre button").forEach(b => b.classList.toggle("on", b === btn));
+        const f = btn.dataset.f;
+        document.querySelectorAll(".kart").forEach(k => k.classList.toggle("gizli", f !== "hepsi" && !k.dataset.t.split(" ").includes(f)));
+      });
+    });
+
+    // Kar yağışı
+    (function () {
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      const c = document.getElementById("kar"), x = c.getContext("2d");
+      let w, h, dpr, taneler = [];
+      function boyut() {
+        dpr = Math.min(devicePixelRatio || 1, 2);
+        w = innerWidth; h = innerHeight;
+        c.width = w * dpr; c.height = h * dpr; c.style.width = w + "px"; c.style.height = h + "px";
+        x.setTransform(dpr, 0, 0, dpr, 0, 0);
+        const n = Math.round(Math.min(140, w * h / 9000));
+        taneler = Array.from({ length: n }, () => ({ x: Math.random() * w, y: Math.random() * h, r: .6 + Math.random() * 2.2, s: .3 + Math.random() * .9, f: Math.random() * 6 }));
+      }
+      addEventListener("resize", boyut); boyut();
+      let son = performance.now();
+      (function ciz(t) {
+        const dt = Math.min(.05, (t - son) / 1000); son = t;
+        x.clearRect(0, 0, w, h);
+        for (const k of taneler) {
+          k.y += (20 + k.r * 18) * k.s * dt * 1.6;
+          k.f += dt;
+          k.x += Math.sin(k.f) * 12 * dt;
+          if (k.y > h + 5) { k.y = -5; k.x = Math.random() * w; }
+          x.globalAlpha = .35 + k.r / 4;
+          x.fillStyle = "#fff";
+          x.beginPath(); x.arc(k.x, k.y, k.r, 0, 7); x.fill();
+        }
+        requestAnimationFrame(ciz);
+      })(son);
+    })();
+  </script>
 </body>
 </html>
