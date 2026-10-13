@@ -1,0 +1,77 @@
+# ayaz-feneri klasöründeki oyunu yatay, tam ekran bir Android APK'ya çevirir
+# ve "ayaz-feneri" yayınına yükler (link hep aynı kalır).
+name: Ayaz Feneri APK
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "ayaz-feneri/**"
+      - ".github/workflows/oyun-apk.yml"
+      - ".github/android-icons-oyun/**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Android projesini hazırla
+        run: |
+          mkdir apk && cd apk
+          npm init -y > /dev/null
+          npm install @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7
+          mkdir www
+          cp -r ../ayaz-feneri/* www/
+          npx cap init "Ayaz Ata'nın Feneri" com.enskygr234.ayazfeneri --web-dir www
+          npx cap add android
+
+      - name: Yatay ve tam ekran yap
+        run: |
+          cd apk/android/app/src/main
+          sed -i 's/android:name=".MainActivity"/android:name=".MainActivity" android:screenOrientation="sensorLandscape"/' AndroidManifest.xml
+          sed -i -E 's#(<style name="AppTheme.NoActionBar"[^>]*>)#\1\n        <item name="android:windowFullscreen">true</item>#' res/values/styles.xml
+          grep -c sensorLandscape AndroidManifest.xml
+          grep -c windowFullscreen res/values/styles.xml
+
+      - name: Uygulama simgesini koy
+        run: |
+          cd apk/android/app/src/main/res
+          rm -rf mipmap-anydpi-v26
+          for d in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
+            cp "$GITHUB_WORKSPACE/.github/android-icons-oyun/$d.png" "mipmap-$d/ic_launcher.png"
+            cp "mipmap-$d/ic_launcher.png" "mipmap-$d/ic_launcher_round.png"
+          done
+
+      - name: APK derle
+        run: |
+          cd apk/android
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+          cp app/build/outputs/apk/debug/app-debug.apk ../../AyazFeneri.apk
+
+      - name: Yayına yükle
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ayaz-feneri
+          name: "Ayaz Ata'nın Feneri (oyun)"
+          body: |
+            Hikâyeli 2D platform oyunu. Telefonuna kurmak için **AyazFeneri.apk** dosyasını indir ve aç.
+            İlk kurulumda "bilinmeyen kaynaklara izin ver" demen gerekebilir.
+            Son derleme: ${{ github.sha }}
+          files: AyazFeneri.apk
+          make_latest: false
+          overwrite_files: true
