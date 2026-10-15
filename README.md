@@ -21,12 +21,36 @@ Hikâyeli 2D platform oyunu, bir Nardugan masalı. Karakoncolos, Ayaz Ata'nın f
 [![APK indir](https://img.shields.io/badge/⬇_APK_indir-Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://github.com/Enskygr234/ensdewloper.github.io/releases/download/ayaz-feneri/AyazFeneri.apk)
 [![Tarayıcıda oyna](https://img.shields.io/badge/Tarayıcıda_oyna-🏮-f2a33a?style=for-the-badge)](https://enskygr234.github.io/ensdewloper.github.io/ayaz-feneri/)
 
+<!-- ENS:TANITIM -->
+### 🎬 Tanıtım
+
+<div align="center">
+
+<a href="img/video/feneri.mp4"><img src="img/video/feneri.gif" width="720" alt="Ayaz Ata'nın Feneri tanıtım videosu"></a>
+
+<sub>Tam kalitede izlemek için görsele tıkla · MP4, 47 saniye</sub>
+
+</div>
+<!-- /ENS:TANITIM -->
+
 ## 🍲 Yemek Tarifleri
 
 Telefona özel tarif uygulaması: 12 hazır Türk tarifi, kişi sayısına göre otomatik hesaplanan malzemeler, adım adım zamanlayıcı, favoriler, kendi tariflerini ekleme. İnternetsiz çalışır.
 
 [![APK indir](https://img.shields.io/badge/⬇_APK_indir-Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://github.com/Enskygr234/ensdewloper.github.io/releases/latest)
 [![Tarayıcıda aç](https://img.shields.io/badge/Tarayıcıda_aç-🍲-c2410c?style=for-the-badge)](https://enskygr234.github.io/ensdewloper.github.io/tarifler/)
+
+<!-- ENS:TANITIM -->
+### 🎬 Tanıtım
+
+<div align="center">
+
+<a href="img/video/tarifler.mp4"><img src="img/video/tarifler.gif" width="720" alt="Yemek Tarifleri tanıtım videosu"></a>
+
+<sub>Tam kalitede izlemek için görsele tıkla · MP4, 34 saniye</sub>
+
+</div>
+<!-- /ENS:TANITIM -->
 
 ## 🎮 Tarayıcı oyunları
 
@@ -56,3 +80,19 @@ APK'yı ilk kurarken telefon "bilinmeyen kaynaklardan yükleme" izni isteyebilir
 📩 [ensygk115@gmail.com](mailto:ensygk115@gmail.com) · [GitHub profilim](https://github.com/Enskygr234)
 
 </div>
+
+<!-- ENS:ALT -->
+---
+
+<div align="center">
+
+**❄️ ENS Developer'ın diğer projeleri**
+
+🎮 Oyunlar: [Mahalle](https://github.com/Enskygr234/mahalle) · [Ayaz Ata'nın Feneri](https://github.com/Enskygr234/ensdewloper.github.io/tree/main/ayaz-feneri) · [Kayıp Fener](https://github.com/Enskygr234/kayip-fener) · [Son Kış](https://github.com/Enskygr234/son-kis) · [Ayazle](https://github.com/Enskygr234/ayazle) · [Buz Kırıcı](https://github.com/Enskygr234/buz-kirici)
+
+[🌐 Bütün projeler](https://enskygr234.github.io/ensdewloper.github.io/) · [👤 GitHub profilim](https://github.com/Enskygr234)
+
+<sub>Kış gelir, kod yazılır.</sub>
+
+</div>
+<!-- /ENS:ALT -->

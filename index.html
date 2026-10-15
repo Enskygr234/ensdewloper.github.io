@@ -177,6 +177,21 @@
     .js .gir { opacity: 0; transform: translateY(14px); }
     .acildi .gir { opacity: 1; transform: none; transition: opacity .7s ease, transform .7s ease; transition-delay: calc(var(--s, 0) * 110ms); }
 
+
+    /* Tanıtım videoları */
+    .kapak video.onizleme, .vitrin-gorsel video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; z-index: 1; background: #06101f; }
+    .vitrin-gorsel video { object-fit: cover; }
+    .kart { position: relative; }
+    .oynat { position: absolute; top: 10px; right: 10px; z-index: 3; font: inherit; font-size: .75rem; font-weight: 600; color: #fff; background: rgba(6,16,31,.72); border: 1px solid rgba(255,255,255,.18); border-radius: 99px; padding: 4px 11px 4px 9px; cursor: pointer; backdrop-filter: blur(4px); transition: background .2s, transform .2s; }
+    .oynat span { color: var(--warm); margin-right: 2px; }
+    .oynat:hover { background: rgba(6,16,31,.92); transform: scale(1.05); }
+    button.btn { font: inherit; font-weight: 600; font-size: .83rem; color: var(--text); cursor: pointer; }
+    #izle { border: 0; padding: 0; background: transparent; width: min(1100px, 94vw); max-width: none; margin: auto; }
+    #izle::backdrop { background: rgba(3,8,18,.86); backdrop-filter: blur(4px); }
+    #izle video { width: 100%; display: block; border-radius: 14px; box-shadow: 0 30px 80px rgba(0,0,0,.6); background: #000; }
+    #izle .izle-ust { display: flex; justify-content: space-between; align-items: center; color: var(--text); margin-bottom: 10px; font-weight: 700; }
+    #izle .izle-ust button { font: inherit; color: var(--muted); background: rgba(255,255,255,.08); border: 1px solid var(--line); border-radius: 99px; padding: 6px 14px; cursor: pointer; }
+
     /* ---------- Giriş animasyonu ---------- */
     #giris { position: fixed; inset: 0; z-index: 100; background: radial-gradient(900px 500px at 50% 40%, #12284a, #050b16 70%); display: grid; place-items: center; transition: opacity .9s ease, visibility .9s; cursor: pointer; }
     #giris.bitti { opacity: 0; visibility: hidden; }
@@ -212,6 +227,10 @@
     <button class="giris-gec" id="girisGec" type="button">Geç</button>
   </div>
   <canvas id="kar" aria-hidden="true"></canvas>
+  <dialog id="izle" aria-label="Tanıtım videosu">
+    <div class="izle-ust"><span id="izleAd"></span><button type="button" id="izleKapat">Kapat ✕</button></div>
+    <video id="izleVideo" controls playsinline></video>
+  </dialog>
 
   <div class="wrap">
     <header class="top" id="ust">
@@ -253,7 +272,7 @@
     <section aria-labelledby="yeni-b" class="gir" style="--s:4">
       <article class="vitrin">
         <a class="vitrin-gorsel" href="https://enskygr234.github.io/mahalle/">
-          <img src="img/mahalle.jpg" alt="Mahalle oyunundan Akasya Sokağı ve bir takvim yaprağı">
+          <video class="onizleme" src="img/video/mahalle.mp4" poster="img/video/mahalle.jpg" muted loop playsinline preload="metadata" aria-label="Mahalle tanıtım videosu"></video>
         </a>
         <div class="vitrin-yazi">
           <span class="vitrin-etiket">Yeni çıktı</span>
@@ -264,6 +283,7 @@
             <a class="btn warm" href="https://enskygr234.github.io/mahalle/">▶ Tarayıcıda oyna</a>
             <a class="btn android small" href="https://github.com/Enskygr234/mahalle/releases/latest/download/Mahalle.apk">⬇ APK</a>
             <a class="btn small" href="https://github.com/Enskygr234/mahalle/releases/latest/download/Mahalle-Windows.exe">⬇ Windows</a>
+            <button class="btn small izle" type="button" data-video="mahalle" data-ad="Mahalle">🎬 Tanıtımı izle</button>
           </div>
         </div>
       </article>
@@ -275,7 +295,7 @@
           <h2>Projelerim</h2>
           <p>Oyna, indir ya da kaynak koduna göz at.</p>
         </div>
-        <nav class="kisayol" aria-label="Kategoriler"><a href="#oyunlar">🎮 Oyunlar <b>8</b></a><a href="#telefon">📱 Telefon uygulamaları <b>2</b></a><a href="#web">🌐 Web <b>6</b></a><a href="#windows">🖥️ Windows araçları <b>6</b></a></nav>
+        <nav class="kisayol" aria-label="Kategoriler"><a href="#oyunlar">🎮 Oyunlar <b>9</b></a><a href="#telefon">📱 Telefon uygulamaları <b>3</b></a><a href="#web">🌐 Web <b>6</b></a><a href="#windows">🖥️ Windows araçları <b>6</b></a></nav>
       </div>
 
       <section class="grup" id="oyunlar" aria-labelledby="oyunlar-b">
@@ -286,9 +306,10 @@
         <div class="grid">
         <article class="kart" data-t="oyun telefon web windows">
           <a class="kapak" href="https://enskygr234.github.io/mahalle/">
-            <img src="img/mahalle.jpg" alt="Mahalle oyunundan Akasya Sokağı ve takvim yaprağı" loading="lazy">
+            <video class="onizleme" src="img/video/mahalle.mp4" poster="img/video/mahalle.jpg" muted loop playsinline preload="none" aria-label="Mahalle tanıtım videosu"></video>
             <div class="rozet"><span class="yeni">YENİ</span><span>Android</span><span>Windows</span></div>
           </a>
+          <button class="oynat izle" type="button" data-video="mahalle" data-ad="Mahalle" aria-label="Mahalle tanıtımını izle"><span aria-hidden="true">▶</span> Tanıtım</button>
           <div class="icerik">
             <h3>Mahalle</h3>
             <p>1996 yazı, Akasya Sokağı. Çocukların top oynadığı arsaya müteahhit tabelası dikiliyor. Seçimli hikaye oyunu, 5 farklı son.</p>
@@ -302,9 +323,10 @@
         </article>
         <article class="kart" data-t="oyun telefon web">
           <a class="kapak" href="ayaz-feneri/">
-            <img src="ayaz-feneri/kapak.png" alt="Ayaz Ata'nın Feneri oyunundan bir sahne" loading="lazy">
+            <video class="onizleme" src="img/video/feneri.mp4" poster="img/video/feneri.jpg" muted loop playsinline preload="none" aria-label="Ayaz Ata'nın Feneri tanıtım videosu"></video>
             <div class="rozet"><span>Oyun</span><span>Android</span></div>
           </a>
+          <button class="oynat izle" type="button" data-video="feneri" data-ad="Ayaz Ata'nın Feneri" aria-label="Ayaz Ata'nın Feneri tanıtımını izle"><span aria-hidden="true">▶</span> Tanıtım</button>
           <div class="icerik">
             <h3>Ayaz Ata'nın Feneri</h3>
             <p>Bir Nardugan masalı. Karakoncolos'un çaldığı üç yıldız parçasını topla, fenerin yeniden yansın. 3 bölüm, hikâye sahneleri ve Karakoncolos ile kapışma.</p>
@@ -316,6 +338,23 @@
             </div>
           </div>
         </article>
+        <article class="kart" data-t="oyun windows">
+          <a class="kapak k-kar" href="https://github.com/Enskygr234/kayip-fener">
+            <img src="https://raw.githubusercontent.com/Enskygr234/kayip-fener/HEAD/docs/title.png" alt="Kayıp Fener oyununun başlık ekranı" loading="lazy" onerror="this.remove()">
+            <span class="emoji">🏮</span>
+            <div class="rozet"><span>Oyun</span><span>Windows</span></div>
+          </a>
+          <div class="icerik">
+            <h3>Kayıp Fener</h3>
+            <p>Martı Köyü'nün feneri söndü. Ada, dedesinin fenerini alıp ormandan mağaraya, sisli limana uzanan bir yolculuğa çıkıyor. Bütün grafik ve müzikler kodla üretiliyor.</p>
+            <div class="dil" style="--c:#512bd4">C# · WinForms</div>
+            <div class="butonlar">
+              <a class="btn warm small" href="https://github.com/Enskygr234/kayip-fener/releases/latest/download/KayipFener.exe">⬇ Windows için indir</a>
+              <a class="btn small" href="https://github.com/Enskygr234/kayip-fener">Kaynak kod</a>
+            </div>
+          </div>
+        </article>
+
         <article class="kart" data-t="oyun windows">
           <a class="kapak k-kar" href="https://github.com/Enskygr234/son-kis">
             <img src="https://raw.githubusercontent.com/Enskygr234/son-kis/HEAD/docs/baslik.png" alt="Son Kış oyununun başlık görseli" loading="lazy" onerror="this.remove()">
@@ -334,9 +373,10 @@
         </article>
         <article class="kart" data-t="oyun telefon web">
           <a class="kapak" href="https://enskygr234.github.io/ayazle/">
-            <img src="img/ayazle.svg" alt="Ayazle kelime oyunundan bir tahta: KALEM, SICAK, MARTI" loading="lazy">
+            <video class="onizleme" src="img/video/ayazle.mp4" poster="img/video/ayazle.jpg" muted loop playsinline preload="none" aria-label="Ayazle tanıtım videosu"></video>
             <div class="rozet"><span>Oyun</span><span>Telefon</span></div>
           </a>
+          <button class="oynat izle" type="button" data-video="ayazle" data-ad="Ayazle" aria-label="Ayazle tanıtımını izle"><span aria-hidden="true">▶</span> Tanıtım</button>
           <div class="icerik">
             <h3>Ayazle</h3>
             <p>Türkçe kelime oyunu. 4, 5 ya da 6 harfli gizli kelimeyi 6 hakta bul; bulunca kar patlar, kelimenin anlamı ve örnek cümlesi çıkar. Her gün yeni kelime ve 2 dakikalık süreli mod.</p>
@@ -349,7 +389,11 @@
           </div>
         </article>
         <article class="kart" data-t="oyun web telefon">
-          <a class="kapak k-kar" href="https://enskygr234.github.io/buz-kirici/"><span class="emoji">🧊</span><div class="rozet"><span>Oyun</span><span>Android</span></div></a>
+          <a class="kapak k-kar" href="https://enskygr234.github.io/buz-kirici/">
+            <video class="onizleme" src="img/video/buzkirici.mp4" poster="img/video/buzkirici.jpg" muted loop playsinline preload="none" aria-label="Buz Kırıcı tanıtım videosu"></video>
+            <div class="rozet"><span>Oyun</span><span>Android</span></div>
+          </a>
+          <button class="oynat izle" type="button" data-video="buzkirici" data-ad="Buz Kırıcı" aria-label="Buz Kırıcı tanıtımını izle"><span aria-hidden="true">▶</span> Tanıtım</button>
           <div class="icerik">
             <h3>Buz Kırıcı</h3>
             <p>Kartopunu kızağınla sektir, buz bloklarını kır. 8 bölüm, güçlendirmeler, ses efektleri.</p>
@@ -362,7 +406,11 @@
           </div>
         </article>
         <article class="kart" data-t="oyun web telefon">
-          <a class="kapak k-nardugan" href="https://enskygr234.github.io/kar-birlestir/"><span class="emoji">⛄</span><div class="rozet"><span>Oyun</span><span>Android</span></div></a>
+          <a class="kapak k-nardugan" href="https://enskygr234.github.io/kar-birlestir/">
+            <video class="onizleme" src="img/video/karbirlestir.mp4" poster="img/video/karbirlestir.jpg" muted loop playsinline preload="none" aria-label="Kar Birleştir tanıtım videosu"></video>
+            <div class="rozet"><span>Oyun</span><span>Android</span></div>
+          </a>
+          <button class="oynat izle" type="button" data-video="karbirlestir" data-ad="Kar Birleştir" aria-label="Kar Birleştir tanıtımını izle"><span aria-hidden="true">▶</span> Tanıtım</button>
           <div class="icerik">
             <h3>Kar Birleştir</h3>
             <p>2048 tarzı kış bulmacası: kar tanesinden kardan adama, fenere… sonunda Ayaz Ata.</p>
@@ -406,9 +454,10 @@
         <div class="grid">
         <article class="kart" data-t="telefon web">
           <a class="kapak" href="https://github.com/Enskygr234/Winterball">
-            <img src="img/winterball.png" alt="Winterball uygulamasından ekranlar" loading="lazy">
+            <video class="onizleme" src="img/video/winterball.mp4" poster="img/video/winterball.jpg" muted loop playsinline preload="none" aria-label="Winterball tanıtım videosu"></video>
             <div class="rozet"><span>Android</span></div>
           </a>
+          <button class="oynat izle" type="button" data-video="winterball" data-ad="Winterball" aria-label="Winterball tanıtımını izle"><span aria-hidden="true">▶</span> Tanıtım</button>
           <div class="icerik">
             <h3>Winterball</h3>
             <p>Canlı skorlar, goller, kartlar, kadrolar, istatistikler ve 14 ligin puan durumu. Favori takımın gol atınca haber verir.</p>
@@ -419,11 +468,29 @@
             </div>
           </div>
         </article>
-        <article class="kart" data-t="telefon web">
-          <a class="kapak" href="tarifler/">
-            <img src="tarifler/kapak.png" alt="Yemek Tarifleri uygulamasından ekranlar" loading="lazy">
+
+        <article class="kart" data-t="telefon">
+          <a class="kapak" href="https://github.com/Enskygr234/golhaber">
+            <video class="onizleme" src="img/video/golhaber.mp4" poster="img/video/golhaber.jpg" muted loop playsinline preload="none" aria-label="GolHaber tanıtım videosu"></video>
             <div class="rozet"><span>Android</span></div>
           </a>
+          <button class="oynat izle" type="button" data-video="golhaber" data-ad="GolHaber" aria-label="GolHaber tanıtımını izle"><span aria-hidden="true">▶</span> Tanıtım</button>
+          <div class="icerik">
+            <h3>GolHaber</h3>
+            <p>Canlı skorlar, gol ve maç sonu bildirimleri, takımına özel transfer haberleri. Hakem düdüğü ve tribün sesleriyle.</p>
+            <div class="dil" style="--c:#7f52ff">Kotlin · Android</div>
+            <div class="butonlar">
+              <a class="btn android small" href="https://github.com/Enskygr234/golhaber/releases/latest/download/GolHaber.apk">⬇ APK</a>
+              <a class="btn small" href="https://github.com/Enskygr234/golhaber">Kaynak kod</a>
+            </div>
+          </div>
+        </article>
+        <article class="kart" data-t="telefon web">
+          <a class="kapak" href="tarifler/">
+            <video class="onizleme" src="img/video/tarifler.mp4" poster="img/video/tarifler.jpg" muted loop playsinline preload="none" aria-label="Yemek Tarifleri tanıtım videosu"></video>
+            <div class="rozet"><span>Android</span></div>
+          </a>
+          <button class="oynat izle" type="button" data-video="tarifler" data-ad="Yemek Tarifleri" aria-label="Yemek Tarifleri tanıtımını izle"><span aria-hidden="true">▶</span> Tanıtım</button>
           <div class="icerik">
             <h3>Yemek Tarifleri</h3>
             <p>12 hazır Türk tarifi, kişi sayısına göre malzeme hesabı, adım zamanlayıcısı ve kendi tariflerin. İnternetsiz çalışır.</p>
@@ -693,6 +760,31 @@
       document.querySelectorAll(".grid").forEach(g => [...g.children].forEach((k, i) => k.style.setProperty("--i", i % 3)));
       const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("gorundu"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -8% 0px" });
       kartlar.forEach(k => io.observe(k));
+    })();
+
+
+    // Tanıtım videoları: görünür olan kartın videosu sessizce oynar, "Tanıtım" düğmesi büyük açar
+    (function () {
+      const sakin = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const vidler = document.querySelectorAll("video.onizleme");
+      if (!sakin && "IntersectionObserver" in window) {
+        const io = new IntersectionObserver(es => es.forEach(e => {
+          const v = e.target;
+          if (e.isIntersecting && e.intersectionRatio > .55) { v.preload = "auto"; v.play().catch(() => {}); }
+          else v.pause();
+        }), { threshold: [0, .55, 1] });
+        vidler.forEach(v => io.observe(v));
+      }
+      const d = document.getElementById("izle"), iv = document.getElementById("izleVideo");
+      document.querySelectorAll(".izle").forEach(b => b.addEventListener("click", () => {
+        iv.src = "img/video/" + b.dataset.video + ".mp4"; iv.poster = "img/video/" + b.dataset.video + ".jpg";
+        document.getElementById("izleAd").textContent = "🎬 " + b.dataset.ad;
+        d.showModal(); iv.play().catch(() => {});
+      }));
+      const kapat = () => { iv.pause(); d.close(); };
+      document.getElementById("izleKapat").addEventListener("click", kapat);
+      d.addEventListener("click", e => { if (e.target === d) kapat(); });
+      d.addEventListener("close", () => iv.pause());
     })();
 
     // Giriş animasyonu: kar taneleri toplanıp ENS yazısını oluşturur, sonra dağılıp yağar
