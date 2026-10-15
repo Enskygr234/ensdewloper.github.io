@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#06080d">
+  <meta name="description" content="Son Vardiya — yıkılmasına beş gün kalan bir AVM'de, telsizdeki eski bekçiyle geçen beş gecelik birinci şahıs 3D hikâye oyunu. ENS Developer.">
+  <title>Son Vardiya</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="css/stil.css">
+</head>
+<body>
+  <canvas id="sahne"></canvas>
+  <div id="vinyet"></div>
+
+  <!-- oyun içi gösterge -->
+  <div id="hud" hidden>
+    <div id="solUst">
+      <div class="saatSatir"><span id="geceAd">GECE 1</span><b id="saat">23:00</b></div>
+      <div id="pil" hidden><i></i><span>FENER</span></div>
+      <div id="hedef"><small>GÖREV</small><span></span></div>
+    </div>
+    <div id="pusula" hidden><svg viewBox="0 0 40 40" width="34" height="34"><path d="M20 4 L29 30 L20 24 L11 30 Z" fill="currentColor"/></svg><span>12 m</span></div>
+    <div id="sagUst">
+      <div id="envanter"></div>
+      <button id="menuBtn" class="yuvarlak" aria-label="Duraklat">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path d="M8 5v14M16 5v14" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div id="nisangah"><i></i><span></span></div>
+    <div id="telsiz" hidden><div class="ust"><span class="led"></span><b class="kim">NEVZAT</b><small>KANAL 3</small></div><p></p></div>
+    <p id="anlati" hidden></p>
+    <p id="ipucu" hidden></p>
+    <!-- dokunmatik -->
+    <div id="joy" hidden><div class="taban"></div><div class="top"></div></div>
+    <div id="dokunDugmeler" hidden>
+      <button id="fenerBtn" class="yuvarlak buyuk" hidden aria-label="Fener">🔦</button>
+      <button id="etkBtn" hidden>✋ <span></span></button>
+    </div>
+  </div>
+
+  <div id="diyalog" hidden>
+    <div class="kim"></div>
+    <p class="metin"></p>
+    <div class="secimler"></div>
+    <span class="devam">▾</span>
+  </div>
+
+  <div id="kart" hidden>
+    <small class="no"></small>
+    <h2></h2>
+    <span class="saat"></span>
+  </div>
+
+  <div id="incele" class="katman" hidden>
+    <div class="kagit">
+      <small class="tur"></small>
+      <h3></h3>
+      <p></p>
+      <button class="dugme">Tamam</button>
+    </div>
+  </div>
+
+  <div id="geceSonu" class="katman" hidden>
+    <div class="ozet">
+      <small>VARDİYA BİTTİ</small>
+      <h2></h2>
+      <p class="saat">06:00</p>
+      <p class="hatiralar"></p>
+      <button class="dugme">Sonraki gece</button>
+    </div>
+  </div>
+
+  <div id="son" class="katman" hidden>
+    <div class="son-ic">
+      <div class="satirlar"></div>
+      <div class="kunye" hidden>
+        <small>SON</small>
+        <h2></h2>
+        <p class="istat"></p>
+        <p class="sonlar"></p>
+        <div class="dugmeler">
+          <button class="dugme" data-is="yeniden">Baştan başla</button>
+          <button class="dugme ikincil" data-is="ana">Ana menü</button>
+        </div>
+        <p class="imza">ENS Developer</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="perde"></div>
+
+  <div id="baslik">
+    <div class="baslik-ic">
+      <p class="ust-yazi">beş gece · bir AVM · bir telsiz</p>
+      <h1>SON<br>VARDİYA</h1>
+      <p class="slogan">Yıldız Çarşısı yıkılmadan önceki son beş gece.</p>
+      <div class="dugmeler">
+        <button class="dugme" id="devamBtn" hidden>Devam et</button>
+        <button class="dugme" id="basBtn">Vardiyaya başla</button>
+      </div>
+      <button class="sesBtn" id="sesBtn">Ses: açık</button>
+      <p class="kucuk" id="kontrolBilgi"></p>
+      <p class="imza">ENS Developer</p>
+    </div>
+  </div>
+
+  <div id="menu" class="katman" hidden>
+    <div class="kagit menu-ic">
+      <h3>Duraklatıldı</h3>
+      <button class="dugme" data-is="devam">Devam</button>
+      <button class="dugme ikincil" data-is="ses">Ses: açık</button>
+      <button class="dugme ikincil" data-is="hassas">Bakış hızı: orta</button>
+      <button class="dugme ikincil" data-is="ana">Ana menü</button>
+      <p class="kucuk">İlerleme her gecenin başında kaydedilir.</p>
+    </div>
+  </div>
+
+  <div id="dondur">
+    <svg viewBox="0 0 64 64" width="64" height="64"><rect x="20" y="8" width="24" height="44" rx="4" fill="none" stroke="currentColor" stroke-width="3"/><path d="M10 40a24 24 0 0 0 20 16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M28 50l3 6-6 2" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+    <p>Telefonu yan çevir</p>
+  </div>
+
+  <noscript>Son Vardiya için JavaScript gerekiyor.</noscript>
+  <script type="module" src="js/oyun.js"></script>
+</body>
+</html>
