@@ -88,6 +88,8 @@ APK'yı ilk kurarken telefon "bilinmeyen kaynaklardan yükleme" izni isteyebilir
 
 **❄️ ENS Developer'ın diğer projeleri**
 
+🆕 Yeni: [Korku Modu](https://github.com/Enskygr234/korku-modu) · [Oyuncu Merkezi](https://github.com/Enskygr234/oyuncu-merkez) · [İndirim Avcısı](https://github.com/Enskygr234/indirim-avcisi)
+
 🎮 Oyunlar: [Mahalle](https://github.com/Enskygr234/mahalle) · [Ayaz Ata'nın Feneri](https://github.com/Enskygr234/ensdewloper.github.io/tree/main/ayaz-feneri) · [Kayıp Fener](https://github.com/Enskygr234/kayip-fener) · [Son Kış](https://github.com/Enskygr234/son-kis) · [Ayazle](https://github.com/Enskygr234/ayazle) · [Buz Kırıcı](https://github.com/Enskygr234/buz-kirici)
 
 [🌐 Bütün projeler](https://enskygr234.github.io/ensdewloper.github.io/) · [👤 GitHub profilim](https://github.com/Enskygr234)

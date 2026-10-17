@@ -9,7 +9,7 @@
   <link rel="icon" href="ayaz-feneri/icons/icon-192.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #06101f;
@@ -29,7 +29,7 @@
     html { background: #06101f; }
     html { scroll-behavior: smooth; }
     body {
-      font-family: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
       background-color: var(--bg);
       background-image: radial-gradient(1200px 600px at 70% -10%, #1d3a63 0%, transparent 60%), linear-gradient(180deg, var(--bg2) 0, var(--bg) 900px);
       background-repeat: no-repeat;
@@ -217,6 +217,71 @@
       #giris { display: none; }
       .js .gir, .js .grid .kart { opacity: 1; transform: none; }
     }
+
+    /* ---------- 2026 yenilemesi ---------- */
+    h1, h2, h3, .logo, .vitrin h2, .sayac .gun, .stats b { font-family: "Space Grotesk", "Inter", system-ui, sans-serif; letter-spacing: -.02em; }
+    .hero h1 { font-weight: 700; letter-spacing: -.035em; }
+    .eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--android); box-shadow: 0 0 0 0 rgba(61,220,132,.6); animation: nabiz 2.2s infinite; }
+    @keyframes nabiz { 70% { box-shadow: 0 0 0 8px rgba(61,220,132,0); } 100% { box-shadow: 0 0 0 0 rgba(61,220,132,0); } }
+
+    /* Kartlar: imleci izleyen ışık ve ince parlak kenar */
+    .kart, .vitrin, .sayac, .kutu, .yeni-kart { --mx: 50%; --my: 0%; }
+    .kart::after, .yeni-kart::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 4; opacity: 0; transition: opacity .3s;
+      background: radial-gradient(420px circle at var(--mx) var(--my), rgba(142,202,230,.13), transparent 45%); }
+    .kart:hover::after, .yeni-kart:hover::after { opacity: 1; }
+    .kart { border-color: rgba(160,205,255,.12); background: linear-gradient(180deg, rgba(20,38,68,.78), rgba(12,24,44,.78)); }
+    .icerik h3 { font-size: 1.18rem; }
+
+    /* Bu hafta eklenenler */
+    .yeniler { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .yeniler-ust { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .yeniler-ust h2 { font-size: 1.25rem; }
+    .yeniler-ust span { font-size: .72rem; font-weight: 700; padding: 3px 9px; border-radius: 99px; background: rgba(61,220,132,.14); color: var(--android); border: 1px solid rgba(61,220,132,.3); }
+    .yeni-kart { position: relative; display: flex; gap: 14px; align-items: center; padding: 14px; border-radius: 16px; text-decoration: none; background: var(--card); border: 1px solid var(--line); transition: transform .2s, border-color .2s; overflow: hidden; }
+    .yeni-kart:hover { transform: translateY(-3px); border-color: rgba(142,202,230,.35); }
+    .yeni-kart img { width: 52px; height: 52px; border-radius: 13px; flex: none; image-rendering: auto; }
+    .yeni-kart img.piksel { image-rendering: pixelated; background: #0d0f0c; padding: 4px; }
+    .yeni-kart b { display: block; font-family: "Space Grotesk", system-ui, sans-serif; font-size: 1.02rem; }
+    .yeni-kart small { display: block; color: var(--muted); font-size: .8rem; line-height: 1.4; margin-top: 2px; }
+    .yeni-kart em { font-style: normal; font-size: .7rem; color: var(--ice); }
+
+    /* Yeni projelerin kapakları */
+    .k-korku { background: radial-gradient(circle at 50% 120%, #3a0d0d, #0a0c0a 60%), #0a0c0a; }
+    .k-korku::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent 0 38px, rgba(0,0,0,.55) 38px 52px); opacity: .7; }
+    .k-korku .gozler { position: absolute; top: 34%; left: 50%; transform: translateX(-50%); display: flex; gap: 18px; z-index: 1; animation: kirp 5s infinite; }
+    .k-korku .gozler i { width: 10px; height: 5px; border-radius: 50%; background: #ff2a2a; box-shadow: 0 0 12px 3px rgba(255,40,40,.7); }
+    @keyframes kirp { 0%, 46%, 50%, 100% { opacity: 1; } 48% { opacity: 0; } }
+    .kapak .ikon { position: relative; z-index: 1; width: 92px; height: 92px; border-radius: 22px; box-shadow: 0 14px 34px rgba(0,0,0,.45); transition: transform .3s; }
+    .kapak .ikon.piksel { image-rendering: pixelated; width: 72px; height: 72px; margin-top: 54px; border-radius: 8px; }
+    .kart:hover .kapak .ikon { transform: scale(1.08) rotate(-3deg); }
+    .k-oyuncu { background: radial-gradient(circle at 30% 20%, #3b3f8f, #12142b 70%); }
+    .k-indirim { background: radial-gradient(circle at 70% 20%, #ff8a5c, #b0301a 55%, #3a120a); }
+
+    /* Filtre çubuğu */
+    .filtre { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin: 14px 0 6px; }
+    .cipler { display: flex; gap: 6px; flex-wrap: wrap; }
+    .cip { font: inherit; font-size: .85rem; font-weight: 500; color: var(--muted); background: rgba(255,255,255,.04); border: 1px solid var(--line); padding: 7px 13px; border-radius: 999px; cursor: pointer; transition: .2s; }
+    .cip:hover { color: var(--text); background: rgba(255,255,255,.09); }
+    .cip b { color: var(--ice-strong); font-weight: 700; margin-left: 3px; }
+    .cip[aria-pressed="true"] { color: #04121f; background: var(--ice); border-color: transparent; }
+    .cip[aria-pressed="true"] b { color: #04121f; }
+    .ara { margin-left: auto; position: relative; }
+    .ara input { font: inherit; font-size: .88rem; color: var(--text); background: rgba(255,255,255,.05); border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px 8px 34px; width: 220px; outline: none; transition: border-color .2s, width .3s; }
+    .ara input:focus { border-color: var(--ice); width: 260px; }
+    .ara::before { content: "⌕"; position: absolute; left: 13px; top: 50%; transform: translateY(-52%); color: var(--muted); font-size: 1.05rem; }
+    .sonuc-yok { display: none; text-align: center; color: var(--muted); padding: 40px 0; }
+    .grup[hidden], .kart[hidden] { display: none !important; }
+    .kart { scroll-margin-top: 90px; }
+
+    @media (max-width: 900px) { .yeniler { grid-template-columns: 1fr; } }
+    @media (max-width: 620px) {
+      .ara { margin-left: 0; width: 100%; }
+      .ara input, .ara input:focus { width: 100%; }
+      .cipler { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin: 0 -18px; padding: 0 18px; }
+      .cipler::-webkit-scrollbar { display: none; }
+      .cip { flex: none; }
+    }
+    @media (prefers-reduced-motion: reduce) { .eyebrow::before, .k-korku .gozler { animation: none; } }
   </style>
   <script>document.documentElement.classList.add("js");</script>
 </head>
@@ -248,7 +313,7 @@
       <div>
         <span class="eyebrow gir" style="--s:0">❄️ Kış gelir, kod yazılır</span>
         <h1 class="gir" style="--s:1">Kışı seven bir <em>geliştirici</em></h1>
-        <p class="lead gir" style="--s:2">Oyunlar, telefon uygulamaları, küçük Windows araçları ve kar yağan web sayfaları yapıyorum. Hepsi Türk masallarından, kıştan ve Nardugan'dan ilham alıyor.</p>
+        <p class="lead gir" style="--s:2">Oyunlar, telefon uygulamaları, bir Minecraft modu, küçük Windows araçları ve kar yağan web sayfaları yapıyorum. Hepsi Türk masallarından, kıştan ve Nardugan'dan ilham alıyor.</p>
         <div class="cta gir" style="--s:3">
           <a class="btn warm" href="#projeler">🎒 Projelere bak</a>
           <a class="btn" href="https://github.com/Enskygr234">GitHub profilim</a>
@@ -288,14 +353,42 @@
       </article>
     </section>
 
+    <section aria-labelledby="yeniler-b" class="gir" style="--s:5">
+      <div class="yeniler-ust"><h2 id="yeniler-b">Bu hafta eklenenler</h2><span>3 YENİ</span></div>
+      <div class="yeniler">
+        <a class="yeni-kart" href="#korku-modu">
+          <img class="piksel" src="img/korku-modu.png" alt="" width="52" height="52">
+          <div><b>Korku Modu</b><small>Albastı geceleri seni izliyor. Türk efsanelerinden Minecraft modu.</small><em>Minecraft 1.21.1 · Fabric</em></div>
+        </a>
+        <a class="yeni-kart" href="#oyuncu-merkez">
+          <img src="img/oyuncu-merkez.svg" alt="" width="52" height="52">
+          <div><b>Oyuncu Merkezi</b><small>Steam indirimleri, ucuzlayınca haber veren istek listesi, Minecraft sunucuları.</small><em>React · Android</em></div>
+        </a>
+        <a class="yeni-kart" href="#indirim-avcisi">
+          <img src="img/indirim-avcisi.svg" alt="" width="52" height="52">
+          <div><b>İndirim Avcısı</b><small>Mağaza indirimlerini 30 dakikada bir toplayıp tek listede gösterir.</small><em>Kotlin · Jetpack Compose</em></div>
+        </a>
+      </div>
+    </section>
+
     <section id="projeler">
       <div class="baslik">
         <div>
           <h2>Projelerim</h2>
           <p>Oyna, indir ya da kaynak koduna göz at.</p>
         </div>
-        <nav class="kisayol" aria-label="Kategoriler"><a href="#oyunlar">🎮 Oyunlar <b>11</b></a><a href="#telefon">📱 Telefon uygulamaları <b>4</b></a><a href="#web">🌐 Web <b>6</b></a><a href="#windows">🖥️ Windows araçları <b>6</b></a></nav>
       </div>
+      <div class="filtre">
+        <div class="cipler" role="group" aria-label="Projeleri süz">
+          <button class="cip" type="button" data-f="" aria-pressed="true">Tümü <b></b></button>
+          <button class="cip" type="button" data-f="oyun" aria-pressed="false">🎮 Oyun <b></b></button>
+          <button class="cip" type="button" data-f="telefon" aria-pressed="false">📱 Telefonda <b></b></button>
+          <button class="cip" type="button" data-f="web" aria-pressed="false">🌐 Tarayıcıda <b></b></button>
+          <button class="cip" type="button" data-f="windows" aria-pressed="false">🖥️ Windows <b></b></button>
+        </div>
+        <label class="ara"><span class="sr" hidden>Proje ara</span><input type="search" id="ara" placeholder="Proje ara…" aria-label="Proje ara" autocomplete="off"></label>
+      </div>
+      <p class="sonuc-yok" id="sonucYok">Aradığın proje bulunamadı. ❄️</p>
 
       <section class="grup" id="oyunlar" aria-labelledby="oyunlar-b">
         <div class="grup-ust">
@@ -303,6 +396,23 @@
           <p>Hikâyeli maceralar, bulmacalar ve tarayıcıda hemen oynanan küçük oyunlar.</p>
         </div>
         <div class="grid">
+        <article class="kart" id="korku-modu" data-t="oyun minecraft mod korku albastı">
+          <a class="kapak k-korku" href="https://github.com/Enskygr234/korku-modu">
+            <span class="gozler" aria-hidden="true"><i></i><i></i></span>
+            <img class="ikon piksel" src="img/korku-modu.png" alt="Korku Modu simgesi" width="72" height="72">
+            <div class="rozet"><span class="yeni">YENİ</span><span>Minecraft</span><span>Fabric</span></div>
+          </a>
+          <div class="icerik">
+            <h3>Korku Modu</h3>
+            <p>Türk efsanelerinden Minecraft korku modu. Albastı sadece ona bakmadığında yaklaşır; Nazar Boncuğu taşıyorsan sana dokunamaz. Gece arkandan ayak sesleri, kulağında fısıltılar.</p>
+            <div class="dil" style="--c:#b07219">Java · Fabric · Minecraft 1.21.1</div>
+            <div class="butonlar">
+              <a class="btn warm small" href="https://github.com/Enskygr234/korku-modu/releases/download/son-surum/korku-modu-1.21.1.jar">⬇ Modu indir</a>
+              <a class="btn small" href="https://github.com/Enskygr234/korku-modu#kurulum">Kurulum</a>
+              <a class="btn small" href="https://github.com/Enskygr234/korku-modu">Kaynak kod</a>
+            </div>
+          </div>
+        </article>
         <article class="kart" data-t="oyun telefon web">
           <a class="kapak" href="son-vardiya/">
             <video class="onizleme" src="img/video/sonvardiya.mp4" poster="img/video/sonvardiya.jpg" muted loop playsinline preload="none" aria-label="Son Vardiya tanıtım videosu"></video>
@@ -485,6 +595,37 @@
           <p>Android için APK olarak indirilebilir uygulamalar.</p>
         </div>
         <div class="grid">
+        <article class="kart" id="oyuncu-merkez" data-t="telefon web steam minecraft indirim">
+          <a class="kapak k-oyuncu" href="https://enskygr234.github.io/oyuncu-merkez/">
+            <img class="ikon" src="img/oyuncu-merkez.svg" alt="Oyuncu Merkezi simgesi" width="92" height="92">
+            <div class="rozet"><span class="yeni">YENİ</span><span>Android</span><span>Web</span></div>
+          </a>
+          <div class="icerik">
+            <h3>Oyuncu Merkezi</h3>
+            <p>Steam'deki indirimler, hedef fiyata inince bildirim gönderen istek listesi ve Minecraft sunucularının açık/kapalı durumu. Aynı uygulama hem sitede hem telefonda.</p>
+            <div class="dil" style="--c:#61dafb">React · Vite · Capacitor</div>
+            <div class="butonlar">
+              <a class="btn warm small" href="https://enskygr234.github.io/oyuncu-merkez/">Aç</a>
+              <a class="btn android small" href="https://github.com/Enskygr234/oyuncu-merkez/releases/download/son-surum/oyuncu-merkezi.apk">⬇ APK</a>
+              <a class="btn small" href="https://github.com/Enskygr234/oyuncu-merkez">Kaynak kod</a>
+            </div>
+          </div>
+        </article>
+        <article class="kart" id="indirim-avcisi" data-t="telefon indirim trendyol alışveriş">
+          <a class="kapak k-indirim" href="https://github.com/Enskygr234/indirim-avcisi">
+            <img class="ikon" src="img/indirim-avcisi.svg" alt="İndirim Avcısı simgesi" width="92" height="92">
+            <div class="rozet"><span class="yeni">YENİ</span><span>Android</span></div>
+          </a>
+          <div class="icerik">
+            <h3>İndirim Avcısı</h3>
+            <p>Güvenilir mağazalardaki indirimleri her 30 dakikada bir toplar; indirim oranına ve kategoriye göre süzersin. Tarayıcı robots.txt kurallarına uyar.</p>
+            <div class="dil" style="--c:#a97bff">Kotlin · Jetpack Compose · Python</div>
+            <div class="butonlar">
+              <a class="btn android small" href="https://github.com/Enskygr234/indirim-avcisi/releases/download/son-surum/indirim-avcisi.apk">⬇ APK</a>
+              <a class="btn small" href="https://github.com/Enskygr234/indirim-avcisi">Kaynak kod</a>
+            </div>
+          </div>
+        </article>
         <article class="kart" data-t="telefon web">
           <a class="kapak" href="https://enskygr234.github.io/Winter-gym/">
             <video class="onizleme" src="img/video/wintergym.mp4" poster="img/video/wintergym.jpg" muted loop playsinline preload="none" aria-label="Winter Gym tanıtım videosu"></video>
@@ -745,7 +886,7 @@
       </div>
     </section>
 
-    <footer>© 2025–2026 ENS Developer · ❄️ Kış gelir, kod yazılır.</footer>
+    <footer>© 2025–<span id="yil">2026</span> ENS Developer · ❄️ Kış gelir, kod yazılır.</footer>
   </div>
 
   <script>
@@ -838,6 +979,48 @@
       d.addEventListener("close", () => iv.pause());
     })();
 
+    // Süzme ve arama
+    (function () {
+      const kartlar = [...document.querySelectorAll("#projeler .kart")];
+      const gruplar = [...document.querySelectorAll("#projeler .grup")];
+      const cipler = [...document.querySelectorAll(".cip")];
+      const ara = document.getElementById("ara"), yok = document.getElementById("sonucYok");
+      const kucuk = s => s.toLocaleLowerCase("tr-TR");
+      const metin = new Map(kartlar.map(k => [k, kucuk(k.textContent + " " + (k.dataset.t || ""))]));
+      const etiket = k => (k.dataset.t || "").split(/\s+/);
+      cipler.forEach(c => { c.querySelector("b").textContent = c.dataset.f ? kartlar.filter(k => etiket(k).includes(c.dataset.f)).length : kartlar.length; });
+      let secili = "";
+      function uygula() {
+        const q = kucuk(ara.value.trim());
+        let gorunen = 0;
+        kartlar.forEach(k => {
+          const uy = (!secili || etiket(k).includes(secili)) && (!q || metin.get(k).includes(q));
+          k.hidden = !uy; if (uy) { gorunen++; k.classList.add("gorundu"); }
+        });
+        gruplar.forEach(g => { g.hidden = !g.querySelector(".kart:not([hidden])"); });
+        yok.style.display = gorunen ? "none" : "block";
+      }
+      cipler.forEach(c => c.addEventListener("click", () => {
+        secili = c.dataset.f;
+        cipler.forEach(x => x.setAttribute("aria-pressed", x === c ? "true" : "false"));
+        uygula();
+      }));
+      ara.addEventListener("input", uygula);
+      document.getElementById("yil").textContent = new Date().getFullYear();
+    })();
+
+    // Kartlarda imleci izleyen ışık
+    (function () {
+      if (matchMedia("(hover: none)").matches) return;
+      document.addEventListener("pointermove", e => {
+        const k = e.target.closest && e.target.closest(".kart, .yeni-kart");
+        if (!k) return;
+        const r = k.getBoundingClientRect();
+        k.style.setProperty("--mx", (e.clientX - r.left) + "px");
+        k.style.setProperty("--my", (e.clientY - r.top) + "px");
+      }, { passive: true });
+    })();
+
     // Giriş animasyonu: kar taneleri toplanıp ENS yazısını oluşturur, sonra dağılıp yağar
     (function () {
       const ortu = document.getElementById("giris");
@@ -857,7 +1040,7 @@
       const o = document.createElement("canvas"), ox = o.getContext("2d");
       o.width = w; o.height = h;
       ox.fillStyle = "#fff"; ox.textAlign = "center"; ox.textBaseline = "middle";
-      ox.font = `800 ${boy}px Poppins, system-ui, sans-serif`;
+      ox.font = `700 ${boy}px "Space Grotesk", system-ui, sans-serif`;
       ox.fillText("ENS", w / 2, h / 2 - boy * .1);
       const veri = ox.getImageData(0, 0, w, h).data, adim = Math.max(3, Math.round(boy / 34)), hedefler = [];
       for (let yy = 0; yy < h; yy += adim) for (let xx = 0; xx < w; xx += adim) if (veri[(yy * w + xx) * 4 + 3] > 128) hedefler.push([xx, yy]);
