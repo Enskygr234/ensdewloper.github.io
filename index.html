@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="ortak.css">
+  <link rel="stylesheet" href="ortak.css?v=4">
   <script>document.documentElement.classList.add("js");</script>
   <style>
     /* ---------- Giriş animasyonu ---------- */
@@ -226,13 +226,13 @@
       .bolum { padding-top: 72px; }
       .giris-alt { top: calc(50% + 54px); }
     }
-    @media (prefers-reduced-motion: reduce) {
-      #giris { display: none; }
-      .js .ac, .js .kahraman h1 .harf { opacity: 1; transform: none; filter: none; }
-    }
   </style>
 </head>
 <body>
+  <script>
+    // Güvenlik ağı: bir hata olursa giriş perdesi sayfayı kapatıp kalmasın
+    setTimeout(function () { var g = document.getElementById("giris"); if (g) { g.remove(); document.body.style.overflow = ""; document.documentElement.classList.add("acildi"); } }, 7000);
+  </script>
   <div id="giris" aria-hidden="true">
     <canvas id="girisKar"></canvas>
     <div class="giris-alt" id="girisAlt"><b>DEVELOPER</b><span>Kış gelir, kod yazılır</span></div>
@@ -427,11 +427,13 @@
     <video id="izleVideo" controls playsinline></video>
   </dialog>
 
-  <script src="ortak.js"></script>
-  <script src="projeler.js"></script>
+  <script src="ortak.js?v=4"></script>
+  <script src="projeler.js?v=4"></script>
   <script>
+  // ortak.js yüklenemezse sayfa yine de çalışsın
+  window.ENS = window.ENS || { belirt: k => (k || document).querySelectorAll("[data-belir]").forEach(e => e.classList.add("gorundu")), say: (e, n) => { e.textContent = n; }, sayaclariKur: () => {}, sakin: false };
   (function () {
-    const P = window.PROJELER, G = window.GRUPLAR, sakin = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const P = window.PROJELER, G = window.GRUPLAR, sakin = false;
     const ESC = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
     const kok = document.documentElement;
 
@@ -640,10 +642,7 @@
     (function () {
       const ortu = document.getElementById("giris");
       const ac = () => { kok.classList.add("acildi"); sayilariBaslat(); window.dispatchEvent(new Event("ens-acildi")); };
-      let gordu = false;
-      try { gordu = sessionStorage.getItem("ensGiris") === "1"; } catch (e) {}
-      if (gordu || sakin || location.hash.length > 1) { ortu.remove(); requestAnimationFrame(ac); return; }
-      try { sessionStorage.setItem("ensGiris", "1"); } catch (e) {}
+      if (location.hash.length > 1) { ortu.remove(); requestAnimationFrame(ac); return; }
       document.body.style.overflow = "hidden";
 
       const c = document.getElementById("girisKar"), x = c.getContext("2d");
