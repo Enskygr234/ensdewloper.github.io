@@ -4,7 +4,7 @@
 (function () {
   const kok = document.documentElement;
   kok.classList.add("js");
-  const sakin = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const sakin = false; // site sahibi animasyonların her cihazda görünmesini istiyor
   const dokunmatik = matchMedia("(hover: none)").matches;
 
   /* ---------- Kaydırınca belirme ---------- */

@@ -139,10 +139,3 @@ p { margin: 0; }
 .alt-bilgi a { color: var(--soluk); }
 .alt-bilgi a:hover { color: var(--metin); }
 .alt-bilgi .sag { margin-left: auto; }
-
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after { animation: none !important; transition: none !important; }
-  .js [data-belir] { opacity: 1; transform: none; filter: none; }
-  #kar { display: none; }
-}

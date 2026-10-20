@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="ortak.css">
+  <link rel="stylesheet" href="ortak.css?v=4">
   <script>document.documentElement.classList.add("js");</script>
   <style>
     .bas { padding: 56px 0 0; max-width: 720px; }
@@ -232,8 +232,9 @@
     </div>
   </footer>
 
-  <script src="ortak.js"></script>
+  <script src="ortak.js?v=4"></script>
   <script>
+  if (!CanvasRenderingContext2D.prototype.roundRect) CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h) { this.rect(x, y, w, h); };
   (function () {
     document.querySelectorAll("#serit a").forEach((a, i) => { a.dataset.belir = ""; a.dataset.egim = "8"; a.style.setProperty("--gecikme", i * 110 + "ms"); });
     ENS.belirt(document.getElementById("serit"));
