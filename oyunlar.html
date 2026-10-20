@@ -5,12 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Oyunlar · ENS Developer</title>
   <meta name="description" content="Tarayıcıda hemen oynanan oyunlar: Yılan, Pong, Tic Tac Toe, Taş Kâğıt Makas, Eşleştirme ve ENS Developer'ın hikâyeli oyunları.">
-  <meta name="theme-color" content="#eef3f9">
+  <meta name="theme-color" content="#060c1d">
   <link rel="icon" href="ayaz-feneri/icons/icon-192.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="ortak.css">
+  <script>document.documentElement.classList.add("js");</script>
   <style>
     .bas { padding: 56px 0 0; max-width: 720px; }
     .bas h1 { font-size: clamp(2.4rem, 7vw, 4.4rem); font-weight: 800; letter-spacing: -.045em; line-height: 1; }
@@ -90,16 +91,43 @@
       .sekme { flex: none; }
       .masa { min-height: 0; }
     }
+    .zipla { display: inline-block; animation: zipla 1.8s cubic-bezier(.3, 1.6, .5, 1) infinite; }
+    @keyframes zipla { 0%, 60%, 100% { transform: translateY(0) rotate(0); } 30% { transform: translateY(-14px) rotate(-10deg); } }
+    .serit a { border: 1px solid var(--cizgi); box-shadow: var(--golge); }
+    .serit a:hover img { transform: scale(1.1); }
+    .serit img { transition: transform .9s var(--yumusak); }
+    .serit b { transition: transform .4s var(--yumusak); }
+    .serit a:hover b { transform: translateY(-4px); color: var(--fener); }
+    .masa { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+    .masa:not([hidden]) { animation: masa .5s var(--yumusak); }
+    @keyframes masa { from { opacity: 0; transform: translateY(16px) scale(.98); } }
+    .sekme { transition: background .2s, color .2s, transform .3s var(--yumusak); }
+    .sekme:hover { transform: translateX(4px); }
+    .sekme[aria-selected="true"] { border-color: var(--cizgi-guclu); box-shadow: 0 0 0 1px rgba(0, 217, 255, .12), 0 10px 30px -14px rgba(0, 217, 255, .5); }
+    .sekme[aria-selected="true"] i { animation: zipla 1.8s cubic-bezier(.3, 1.6, .5, 1) infinite; }
+    canvas.oyun-alani { box-shadow: inset 0 0 0 1px var(--cizgi), 0 0 50px -20px rgba(0, 217, 255, .5); }
+    .xox button { transition: transform .25s cubic-bezier(.3, 1.6, .5, 1), background .2s; }
+    .xox button:not(:disabled):hover { transform: scale(1.05); background: rgba(255, 255, 255, .1); }
+    .xox button.x, .xox button.o { animation: koy .35s cubic-bezier(.3, 1.6, .5, 1); }
+    @keyframes koy { from { transform: scale(.3) rotate(-30deg); opacity: 0; } }
+    .xox button.kazandi { animation: kazan .6s ease 3; }
+    @keyframes kazan { 50% { transform: scale(1.1); } }
+    .tkm button { transition: transform .3s cubic-bezier(.3, 1.6, .5, 1), border-color .2s; }
+    .tkm button:hover { transform: translateY(-5px) rotate(-4deg); }
+    .tkm button:hover span { animation: zipla 1s infinite; }
+    .karsilasma span { animation: koy .5s cubic-bezier(.3, 1.6, .5, 1); }
+    .eslesme.tamam .on { animation: kazan .5s ease; }
   </style>
 </head>
 <body>
+  <div class="gok" aria-hidden="true"><i></i><i></i><i></i></div>
   <canvas id="kar" aria-hidden="true"></canvas>
 
   <header class="ust">
     <div class="sar">
       <a class="logo" href="./" aria-label="ENS Developer ana sayfa">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 2v20M3.3 7l17.4 10M3.3 17L20.7 7M9 4l3 2 3-2M9 20l3-2 3 2M4 10.5l2.7-.7-.9-2.6M20 13.5l-2.7.7.9 2.6M4 13.5l2.7.7-.9 2.6M20 10.5l-2.7-.7.9-2.6"/></svg>
-        ENS Developer
+        ENS <span>DEVELOPER</span>
       </a>
       <nav class="menu" aria-label="Ana menü">
         <a href="./#projeler">Projeler</a>
@@ -108,17 +136,16 @@
         <a href="./#iletisim">İletişim</a>
         <a href="https://github.com/Enskygr234">GitHub</a>
       </nav>
-      <button class="tema-dugme" type="button" aria-label="Temayı değiştir">☾</button>
     </div>
   </header>
 
   <main class="sar">
-    <section class="bas">
-      <h1>Oyunlar</h1>
+    <section class="bas" data-belir>
+      <h1>Oyunlar <span class="zipla" aria-hidden="true">🎮</span></h1>
       <p>Hikâyeli oyunlarım tarayıcıda da açılıyor. Kısa bir mola için aşağıdaki küçük oyunlara da bakabilirsin; hepsi telefonda oynanıyor.</p>
     </section>
 
-    <nav class="serit" aria-label="Hikâyeli oyunlar">
+    <nav class="serit" aria-label="Hikâyeli oyunlar" id="serit">
       <a href="son-vardiya/"><img src="img/video/sonvardiya.jpg" alt="" loading="lazy"><span><b>Son Vardiya</b><small>3D hikâye, 5 gece</small></span></a>
       <a href="https://enskygr234.github.io/Son-Tren/"><img src="img/video/sontren.jpg" alt="" loading="lazy"><span><b>Son Tren</b><small>3D hikâye, 3 son</small></span></a>
       <a href="https://enskygr234.github.io/mahalle/"><img src="img/mahalle.jpg" alt="" loading="lazy"><span><b>Mahalle</b><small>Seçimli hikâye, 5 son</small></span></a>
@@ -126,8 +153,8 @@
     </nav>
 
     <section class="salon" aria-labelledby="salon-baslik">
-      <h2 id="salon-baslik">Kısa mola oyunları</h2>
-      <div class="sekmeler" role="tablist" aria-label="Oyun seç">
+      <h2 id="salon-baslik" data-belir>Kısa mola oyunları</h2>
+      <div class="sekmeler" role="tablist" aria-label="Oyun seç" data-belir="sol">
         <button class="sekme" role="tab" id="s-yilan" aria-controls="yilan" aria-selected="true"><i aria-hidden="true">🐍</i>Yılan</button>
         <button class="sekme" role="tab" id="s-pong" aria-controls="pong" aria-selected="false" tabindex="-1"><i aria-hidden="true">🏓</i>Pong</button>
         <button class="sekme" role="tab" id="s-xox" aria-controls="xox" aria-selected="false" tabindex="-1"><i aria-hidden="true">⭕</i>Tic Tac Toe</button>
@@ -208,6 +235,8 @@
   <script src="ortak.js"></script>
   <script>
   (function () {
+    document.querySelectorAll("#serit a").forEach((a, i) => { a.dataset.belir = ""; a.dataset.egim = "8"; a.style.setProperty("--gecikme", i * 110 + "ms"); });
+    ENS.belirt(document.getElementById("serit"));
     const $ = id => document.getElementById(id);
     const oku = (k, v) => { try { return JSON.parse(localStorage.getItem(k)) ?? v; } catch (e) { return v; } };
     const kaydet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
