@@ -1,288 +1,540 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Oyunlar - ENS Developer</title>
-  <meta name="theme-color" content="#041121">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Oyunlar · ENS Developer</title>
+  <meta name="description" content="Tarayıcıda hemen oynanan oyunlar: Yılan, Pong, Tic Tac Toe, Taş Kâğıt Makas, Eşleştirme ve ENS Developer'ın hikâyeli oyunları.">
+  <meta name="theme-color" content="#eef3f9">
+  <link rel="icon" href="ayaz-feneri/icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="ortak.css">
   <style>
-    :root {
-      --bg: #040b17;
-      --card: #0b162a;
-      --accent: #00d9ff;
-      --text: #e6f1ff;
-      --muted: #8fa1bf;
-      --border: rgba(255,255,255,0.08);
-      font-family: "Segoe UI", Roboto, sans-serif;
-    }
+    .bas { padding: 56px 0 0; max-width: 720px; }
+    .bas h1 { font-size: clamp(2.4rem, 7vw, 4.4rem); font-weight: 800; letter-spacing: -.045em; line-height: 1; }
+    .bas p { margin-top: 16px; color: var(--soluk); font-size: 1.1rem; }
 
-    body {
-      margin: 0;
-      padding: 0;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
+    /* Hikâyeli oyunlar şeridi */
+    .serit { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 36px; }
+    .serit a { position: relative; display: block; aspect-ratio: 4 / 3; border-radius: 18px; overflow: hidden; color: #fff; text-decoration: none; background: #0f1b3a; }
+    .serit img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+    .serit a:hover img { transform: scale(1.04); }
+    .serit a::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(6, 10, 28, .88)); }
+    .serit span { position: absolute; left: 14px; right: 14px; bottom: 12px; z-index: 1; }
+    .serit b { display: block; font-family: var(--yazi-baslik); font-size: 1.15rem; }
+    .serit small { color: rgba(255, 255, 255, .8); font-size: .82rem; }
 
-    header {
-      text-align: center;
-      padding: 30px 10px;
-      background: #06152d;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.6);
-    }
+    /* Oyun seçici */
+    .salon { margin-top: 64px; display: grid; grid-template-columns: 220px 1fr; gap: 24px; align-items: start; }
+    .salon h2 { grid-column: 1 / -1; font-size: clamp(1.8rem, 4vw, 2.4rem); font-weight: 800; letter-spacing: -.035em; }
+    .sekmeler { display: flex; flex-direction: column; gap: 4px; position: sticky; top: 84px; }
+    .sekme { font: inherit; text-align: left; display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: 12px; border: 1px solid transparent; background: none; color: var(--soluk); cursor: pointer; font-weight: 500; }
+    .sekme:hover { color: var(--metin); background: var(--yuzey-2); }
+    .sekme[aria-selected="true"] { color: var(--metin); background: var(--yuzey); border-color: var(--cizgi); font-weight: 600; }
+    .sekme i { font-style: normal; font-size: 1.15rem; }
 
-    header h1 {
-      color: var(--accent);
-      letter-spacing: 2px;
-      margin: 0;
-      font-size: 2.3rem;
-    }
+    .masa { background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 24px; padding: clamp(18px, 3vw, 30px); box-shadow: var(--golge); min-height: 520px; }
+    .masa-ust { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; margin-bottom: 18px; }
+    .masa-ust h3 { font-size: 1.6rem; font-weight: 800; letter-spacing: -.03em; }
+    .masa-ust .skor { margin-left: auto; display: flex; gap: 16px; color: var(--soluk); font-size: .95rem; font-variant-numeric: tabular-nums; }
+    .masa-ust .skor b { color: var(--metin); font-family: var(--yazi-baslik); font-size: 1.15rem; }
+    .yardim { color: var(--soluk); font-size: .92rem; margin-top: 14px; }
+    .durum { min-height: 1.6em; font-weight: 600; margin: 4px 0 14px; }
+    .arac { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 
-    nav {
-      margin-top: 14px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-    }
+    canvas.oyun-alani { width: 100%; max-width: 560px; height: auto; border-radius: 16px; background: #13204a; touch-action: none; user-select: none; }
 
-    nav a {
-      color: var(--text);
-      text-decoration: none;
-      padding: 8px 18px;
-      border-radius: 10px;
-      margin: 0;
-      background: rgba(255,255,255,0.05);
-      transition: all .25s;
-    }
+    .yon { display: none; grid-template-columns: repeat(3, 56px); grid-template-rows: repeat(2, 48px); gap: 6px; margin-top: 14px; }
+    .yon button { font: inherit; font-size: 1.2rem; border-radius: 12px; border: 1px solid var(--cizgi); background: var(--yuzey-2); color: var(--metin); }
+    .yon button[data-y="yukari"] { grid-column: 2; }
+    .yon button[data-y="sol"] { grid-column: 1; grid-row: 2; }
+    .yon button[data-y="asagi"] { grid-column: 2; grid-row: 2; }
+    .yon button[data-y="sag"] { grid-column: 3; grid-row: 2; }
+    @media (hover: none) { .yon { display: grid; } }
 
-    nav a:hover {
-      background: var(--accent);
-      color: #000;
-    }
+    /* XOX */
+    .xox { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: min(100%, 330px); }
+    .xox button { aspect-ratio: 1; font-family: var(--yazi-baslik); font-size: 2.6rem; font-weight: 800; border-radius: 16px; border: 1px solid var(--cizgi); background: var(--yuzey-2); color: var(--metin); cursor: pointer; }
+    .xox button:disabled { cursor: default; }
+    .xox button.x { color: var(--ayaz); }
+    .xox button.o { color: var(--fener); }
+    .xox button.kazandi { background: var(--fener); color: var(--fener-metin); }
+    .secim { display: inline-flex; border: 1px solid var(--cizgi); border-radius: 12px; overflow: hidden; }
+    .secim button { font: inherit; font-size: .88rem; padding: 8px 12px; border: 0; background: var(--yuzey); color: var(--soluk); cursor: pointer; }
+    .secim button[aria-pressed="true"] { background: var(--metin); color: var(--zemin); }
 
-    .games-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
-      gap: 22px;
-      padding: 30px;
-      max-width: 1200px;
-      margin: auto;
-    }
+    /* Taş kâğıt makas */
+    .tkm { display: flex; gap: 10px; flex-wrap: wrap; }
+    .tkm button { font: inherit; display: flex; flex-direction: column; align-items: center; gap: 6px; width: 104px; padding: 16px 8px; border-radius: 18px; border: 1px solid var(--cizgi); background: var(--yuzey-2); color: var(--metin); cursor: pointer; font-weight: 600; }
+    .tkm button:hover { border-color: var(--soluk); }
+    .tkm button span { font-size: 2.4rem; line-height: 1; }
+    .karsilasma { display: flex; align-items: center; gap: 18px; margin-top: 22px; font-size: 3rem; min-height: 64px; }
+    .karsilasma small { font-size: .95rem; color: var(--soluk); }
 
-    .game-card {
-      background: var(--card);
-      padding: 18px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-      transition: transform .3s ease, box-shadow .3s ease;
-    }
+    /* Eşleştirme */
+    .kartlar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; width: min(100%, 420px); perspective: 800px; }
+    .eslesme { aspect-ratio: 1; border: 0; padding: 0; background: none; cursor: pointer; position: relative; transform-style: preserve-3d; transition: transform .35s; }
+    .eslesme.acik, .eslesme.tamam { transform: rotateY(180deg); }
+    .eslesme span { position: absolute; inset: 0; display: grid; place-items: center; border-radius: 14px; backface-visibility: hidden; -webkit-backface-visibility: hidden; font-size: 2rem; }
+    .eslesme .arka { background: #1f3570; background-image: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, .18) 0 2px, transparent 3px), radial-gradient(circle at 70% 65%, rgba(255, 255, 255, .14) 0 2px, transparent 3px); background-size: 22px 22px; }
+    .eslesme .on { background: var(--yuzey-2); border: 1px solid var(--cizgi); transform: rotateY(180deg); }
+    .eslesme.tamam .on { background: color-mix(in srgb, var(--fener) 25%, var(--yuzey)); }
 
-    .game-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 30px rgba(0,0,0,0.6);
-    }
-
-    .game-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-      font-weight: bold;
-      font-size: 1.1rem;
-    }
-
-    .button {
-      background: var(--accent);
-      border: none;
-      color: #000;
-      padding: 6px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all .2s;
-    }
-
-    .button:hover { opacity: 0.85; transform: scale(1.05); }
-
-    .board {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
-
-    .cell {
-      background: rgba(255,255,255,0.04);
-      padding: 20px;
-      text-align: center;
-      font-size: 1.6rem;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background .25s;
-    }
-
-    .cell:hover { background: rgba(0,217,255,0.2); }
-
-    canvas {
-      background: #061224;
-      border-radius: 10px;
-      display: block;
-      margin: 10px auto;
-    }
-
-    .small { font-size: .9rem; color: var(--muted); }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      color: var(--muted);
-      font-size: .9rem;
-      border-top: 1px solid var(--border);
-      margin-top: 30px;
+    @media (max-width: 860px) {
+      .serit { grid-template-columns: repeat(2, 1fr); }
+      .salon { grid-template-columns: 1fr; }
+      .sekmeler { flex-direction: row; position: static; overflow-x: auto; scrollbar-width: none; margin: 0 calc(var(--kenar) * -1); padding: 0 var(--kenar); }
+      .sekmeler::-webkit-scrollbar { display: none; }
+      .sekme { flex: none; }
+      .masa { min-height: 0; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>🎮 ENS DEVELOPER</h1>
-    <nav>
-      <a href="index.html">Anasayfa</a>
-      <a href="hakkımda.html">Hakkımda</a>
-      <a href="tarifler/">Yemek Tarifleri</a>
-    </nav>
+  <canvas id="kar" aria-hidden="true"></canvas>
+
+  <header class="ust">
+    <div class="sar">
+      <a class="logo" href="./" aria-label="ENS Developer ana sayfa">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 2v20M3.3 7l17.4 10M3.3 17L20.7 7M9 4l3 2 3-2M9 20l3-2 3 2M4 10.5l2.7-.7-.9-2.6M20 13.5l-2.7.7.9 2.6M4 13.5l2.7.7-.9 2.6M20 10.5l-2.7-.7.9-2.6"/></svg>
+        ENS Developer
+      </a>
+      <nav class="menu" aria-label="Ana menü">
+        <a href="./#projeler">Projeler</a>
+        <a href="oyunlar.html" aria-current="page">Oyunlar</a>
+        <a href="hakkımda.html">Hakkımda</a>
+        <a href="./#iletisim">İletişim</a>
+        <a href="https://github.com/Enskygr234">GitHub</a>
+      </nav>
+      <button class="tema-dugme" type="button" aria-label="Temayı değiştir">☾</button>
+    </div>
   </header>
 
-  <main class="games-grid">
-    <section class="game-card" id="son-vardiya" style="grid-column:1/-1;background:linear-gradient(135deg,#06080d,#3a2a14);">
-      <div class="game-title">
-        <span>🔦 Son Vardiya <small style="color:var(--muted);font-weight:400">· yeni</small></span>
-      </div>
-      <a href="son-vardiya/"><video src="img/video/sonvardiya.mp4" poster="img/video/sonvardiya.jpg" muted loop playsinline autoplay preload="metadata" style="width:100%;border-radius:10px;display:block" aria-label="Son Vardiya tanıtım videosu"></video></a>
-      <p class="small" style="margin:12px 0">Yıldız Çarşısı yıkılmadan önceki son beş gece. Elinde fener, belinde telsiz; telsizin öbür ucunda otuz yıldır bu çarşıyı bekleyen Nevzat Abi. Birinci şahıs 3D hikâye oyunu: 5 gece, 5 hatıra, 3 son. Telefonda yan çevirerek, kulaklıkla oyna.</p>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <a class="button" href="son-vardiya/" style="text-decoration:none">▶ Tarayıcıda oyna</a>
-        <a class="button" href="https://github.com/Enskygr234/Son-Vardiya/releases/download/son-surum/SonVardiya.apk" style="text-decoration:none;background:#3ddc84">⬇ Android APK</a>
-      </div>
+  <main class="sar">
+    <section class="bas">
+      <h1>Oyunlar</h1>
+      <p>Hikâyeli oyunlarım tarayıcıda da açılıyor. Kısa bir mola için aşağıdaki küçük oyunlara da bakabilirsin; hepsi telefonda oynanıyor.</p>
     </section>
 
-    <section class="game-card" id="son-tren" style="grid-column:1/-1;background:linear-gradient(135deg,#0b1220,#3a2a4a);">
-      <div class="game-title">
-        <span>🚂 Son Tren</span>
-      </div>
-      <a href="https://enskygr234.github.io/Son-Tren/"><video src="img/video/sontren.mp4" poster="img/video/sontren.jpg" muted loop playsinline autoplay preload="metadata" style="width:100%;border-radius:10px;display:block" aria-label="Son Tren tanıtım videosu"></video></a>
-      <p class="small" style="margin:12px 0">Bir gece treninde uyanıyorsun; nereye gittiğini, kim olduğunu hatırlamıyorsun. Karlı ova, yağmurlu şehir ve deniz kıyısında binen yolculara yardım et, anılarını geri topla. 3D hikâye oyunu: 3 son, 3 gizli fotoğraf. Telefonda yan çevirerek oynanır.</p>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <a class="button" href="https://enskygr234.github.io/Son-Tren/" style="text-decoration:none">▶ Tarayıcıda oyna</a>
-        <a class="button" href="https://github.com/Enskygr234/Son-Tren/releases/download/son-surum/SonTren.apk" style="text-decoration:none;background:#3ddc84">⬇ Android APK</a>
-      </div>
-    </section>
+    <nav class="serit" aria-label="Hikâyeli oyunlar">
+      <a href="son-vardiya/"><img src="img/video/sonvardiya.jpg" alt="" loading="lazy"><span><b>Son Vardiya</b><small>3D hikâye, 5 gece</small></span></a>
+      <a href="https://enskygr234.github.io/Son-Tren/"><img src="img/video/sontren.jpg" alt="" loading="lazy"><span><b>Son Tren</b><small>3D hikâye, 3 son</small></span></a>
+      <a href="https://enskygr234.github.io/mahalle/"><img src="img/mahalle.jpg" alt="" loading="lazy"><span><b>Mahalle</b><small>Seçimli hikâye, 5 son</small></span></a>
+      <a href="ayaz-feneri/"><img src="ayaz-feneri/kapak.png" alt="" loading="lazy"><span><b>Ayaz Ata'nın Feneri</b><small>Platform, 3 bölüm</small></span></a>
+    </nav>
 
-    <section class="game-card" id="mahalle" style="grid-column:1/-1;background:linear-gradient(135deg,#1f2d5a,#5a3a5a);">
-      <div class="game-title">
-        <span>🏘️ Mahalle</span>
+    <section class="salon" aria-labelledby="salon-baslik">
+      <h2 id="salon-baslik">Kısa mola oyunları</h2>
+      <div class="sekmeler" role="tablist" aria-label="Oyun seç">
+        <button class="sekme" role="tab" id="s-yilan" aria-controls="yilan" aria-selected="true"><i aria-hidden="true">🐍</i>Yılan</button>
+        <button class="sekme" role="tab" id="s-pong" aria-controls="pong" aria-selected="false" tabindex="-1"><i aria-hidden="true">🏓</i>Pong</button>
+        <button class="sekme" role="tab" id="s-xox" aria-controls="xox" aria-selected="false" tabindex="-1"><i aria-hidden="true">⭕</i>Tic Tac Toe</button>
+        <button class="sekme" role="tab" id="s-tkm" aria-controls="tkm" aria-selected="false" tabindex="-1"><i aria-hidden="true">✊</i>Taş Kâğıt Makas</button>
+        <button class="sekme" role="tab" id="s-eslestir" aria-controls="eslestir" aria-selected="false" tabindex="-1"><i aria-hidden="true">🧤</i>Eşleştirme</button>
       </div>
-      <a href="https://enskygr234.github.io/mahalle/"><img src="img/mahalle.jpg" alt="Mahalle oyunundan Akasya Sokağı ve bir takvim yaprağı" style="width:100%;border-radius:10px;display:block"></a>
-      <p class="small" style="margin:12px 0">1996 yazı, Akasya Sokağı. Çocukların top oynadığı arsaya müteahhit tabelası dikiliyor. Seçimlerinle ilerleyen hikaye oyunu: 6 bölüm, 5 farklı son, anı defteri.</p>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <a class="button" href="https://enskygr234.github.io/mahalle/" style="text-decoration:none">▶ Tarayıcıda oyna</a>
-        <a class="button" href="https://github.com/Enskygr234/mahalle/releases/latest/download/Mahalle.apk" style="text-decoration:none;background:#3ddc84">⬇ Android APK</a>
-        <a class="button" href="https://github.com/Enskygr234/mahalle/releases/latest/download/Mahalle-Windows.exe" style="text-decoration:none">⬇ Windows</a>
-      </div>
-    </section>
 
-    <section class="game-card" id="ayaz-feneri" style="grid-column:1/-1;background:linear-gradient(135deg,#0b1a33,#1d3a5f);">
-      <div class="game-title">
-        <span>🏮 Ayaz Ata'nın Feneri</span>
-      </div>
-      <a href="ayaz-feneri/"><img src="ayaz-feneri/kapak.png" alt="Ayaz Ata'nın Feneri oyunundan bir sahne" style="width:100%;border-radius:10px;display:block"></a>
-      <p class="small" style="margin:12px 0">Bir Nardugan masalı: Karakoncolos'un çaldığı üç yıldız parçasını topla, Ayaz Ata'nın fenerini yeniden yak. 3 bölüm, hikâye sahneleri ve Karakoncolos ile kapışma. Telefonda yan çevirerek oynanır.</p>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <a class="button" href="ayaz-feneri/" style="text-decoration:none">▶ Tarayıcıda oyna</a>
-        <a class="button" href="https://github.com/Enskygr234/ensdewloper.github.io/releases/download/ayaz-feneri/AyazFeneri.apk" style="text-decoration:none;background:#3ddc84">⬇ Android APK</a>
-      </div>
-    </section>
+      <div>
+        <!-- Yılan -->
+        <section class="masa" id="yilan" role="tabpanel" aria-labelledby="s-yilan">
+          <div class="masa-ust"><h3>Yılan</h3><div class="skor"><span>Skor <b id="yilanSkor">0</b></span><span>Rekor <b id="yilanRekor">0</b></span></div></div>
+          <canvas class="oyun-alani" id="yilanTuval" width="560" height="400" aria-label="Yılan oyun alanı"></canvas>
+          <div class="yon" aria-label="Yön tuşları">
+            <button type="button" data-y="yukari" aria-label="Yukarı">▲</button>
+            <button type="button" data-y="sol" aria-label="Sol">◀</button>
+            <button type="button" data-y="asagi" aria-label="Aşağı">▼</button>
+            <button type="button" data-y="sag" aria-label="Sağ">▶</button>
+          </div>
+          <div class="arac"><button class="dugme fener" type="button" id="yilanBasla">Başlat</button></div>
+          <p class="yardim">Yön tuşları ya da W A S D. Telefonda alanı kaydır ya da alttaki tuşları kullan. Boşluk tuşu durdurur.</p>
+        </section>
 
-    <!-- Tic Tac Toe -->
-    <section class="game-card" id="tictactoe">
-      <div class="game-title">
-        <span>Tic Tac Toe</span>
-        <button class="button" id="ttt-reset">Yenile</button>
-      </div>
-      <div class="board" id="ttt-board"></div>
-      <div class="small">Sıra: <span id="ttt-turn">X</span></div>
-    </section>
+        <!-- Pong -->
+        <section class="masa" id="pong" role="tabpanel" aria-labelledby="s-pong" hidden>
+          <div class="masa-ust"><h3>Pong</h3><div class="skor"><span>Sen <b id="pongSen">0</b></span><span>Bilgisayar <b id="pongPc">0</b></span></div></div>
+          <canvas class="oyun-alani" id="pongTuval" width="560" height="340" aria-label="Pong oyun alanı"></canvas>
+          <div class="arac"><button class="dugme fener" type="button" id="pongBasla">Başlat</button></div>
+          <p class="yardim">Soldaki raket senin. Fareyle ya da parmağınla alanın üstünde kaydır; klavyede W ve S ya da yön tuşları. 7 sayıya ulaşan kazanır.</p>
+        </section>
 
-    <!-- Taş Kağıt Makas -->
-    <section class="game-card" id="rps">
-      <div class="game-title">
-        <span>Taş Kağıt Makas</span>
-        <button class="button" id="rps-reset">Sıfırla</button>
-      </div>
-      <div class="controls">
-        <button class="button" data-move="rock">Taş</button>
-        <button class="button" data-move="paper">Kâğıt</button>
-        <button class="button" data-move="scissors">Makas</button>
-      </div>
-      <p class="small">Bilgisayar: <span id="rps-comp">-</span> — Sonuç: <strong id="rps-result">-</strong></p>
-    </section>
+        <!-- Tic Tac Toe -->
+        <section class="masa" id="xox" role="tabpanel" aria-labelledby="s-xox" hidden>
+          <div class="masa-ust">
+            <h3>Tic Tac Toe</h3>
+            <div class="secim" role="group" aria-label="Rakip">
+              <button type="button" data-rakip="pc" aria-pressed="true">Bilgisayara karşı</button>
+              <button type="button" data-rakip="iki" aria-pressed="false">İki kişi</button>
+            </div>
+            <div class="skor"><span>X <b id="xoxX">0</b></span><span>O <b id="xoxO">0</b></span><span>Berabere <b id="xoxB">0</b></span></div>
+          </div>
+          <p class="durum" id="xoxDurum" aria-live="polite">Sıra sende: X</p>
+          <div class="xox" id="xoxTahta"></div>
+          <div class="arac"><button class="dugme" type="button" id="xoxYeni">Yeni el</button></div>
+        </section>
 
-    <!-- Memory -->
-    <section class="game-card" id="memory">
-      <div class="game-title">
-        <span>Memory (Eşleştirme)</span>
-        <button class="button" id="mem-reset">Yenile</button>
-      </div>
-      <div id="mem-board" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px"></div>
-      <p class="small">Eşleşenler: <span id="mem-score">0</span>/8</p>
-    </section>
+        <!-- Taş kâğıt makas -->
+        <section class="masa" id="tkm" role="tabpanel" aria-labelledby="s-tkm" hidden>
+          <div class="masa-ust"><h3>Taş Kâğıt Makas</h3><div class="skor"><span>Sen <b id="tkmSen">0</b></span><span>Bilgisayar <b id="tkmPc">0</b></span></div></div>
+          <p class="durum" id="tkmDurum" aria-live="polite">Seçimini yap.</p>
+          <div class="tkm">
+            <button type="button" data-s="tas"><span aria-hidden="true">✊</span>Taş</button>
+            <button type="button" data-s="kagit"><span aria-hidden="true">✋</span>Kâğıt</button>
+            <button type="button" data-s="makas"><span aria-hidden="true">✌️</span>Makas</button>
+          </div>
+          <div class="karsilasma" id="tkmSahne" aria-hidden="true"></div>
+          <div class="arac"><button class="dugme" type="button" id="tkmSifirla">Skoru sıfırla</button></div>
+        </section>
 
-    <!-- Snake -->
-    <section class="game-card" id="snake">
-      <div class="game-title">
-        <span>Yılan (Snake)</span>
-        <div>
-          <button class="button" id="snake-start">Başlat</button>
-          <button class="button" id="snake-reset">Yenile</button>
-        </div>
+        <!-- Eşleştirme -->
+        <section class="masa" id="eslestir" role="tabpanel" aria-labelledby="s-eslestir" hidden>
+          <div class="masa-ust"><h3>Eşleştirme</h3><div class="skor"><span>Hamle <b id="esHamle">0</b></span><span>Çift <b id="esCift">0</b>/8</span><span>En iyi <b id="esRekor">–</b></span></div></div>
+          <p class="durum" id="esDurum" aria-live="polite">Kartları çevir, aynı resimleri bul.</p>
+          <div class="kartlar" id="esTahta"></div>
+          <div class="arac"><button class="dugme" type="button" id="esYeni">Kartları karıştır</button></div>
+        </section>
       </div>
-      <canvas id="snake-canvas" width="320" height="240"></canvas>
-      <p class="small">Yön tuşlarıyla kontrol et. Skor: <span id="snake-score">0</span></p>
-    </section>
-
-    <!-- Pong -->
-    <section class="game-card" id="pong">
-      <div class="game-title">
-        <span>Pong</span>
-        <div>
-          <button class="button" id="pong-start">Başlat</button>
-          <button class="button" id="pong-reset">Yenile</button>
-        </div>
-      </div>
-      <canvas id="pong-canvas" width="360" height="200"></canvas>
-      <p class="small">W/S : Sol paddle — Bilgisayar sağ paddle. Skor: <span id="pong-score">0 - 0</span></p>
     </section>
   </main>
 
-  <footer>
-    © 2025 ENS Developer — Tüm hakları saklıdır.
+  <footer class="alt-bilgi">
+    <div class="sar">
+      <span>© 2025–<span data-yil>2026</span> ENS Developer</span>
+      <span>Kış gelir, kod yazılır.</span>
+      <a class="sag" href="./">Ana sayfa</a>
+    </div>
   </footer>
 
+  <script src="ortak.js"></script>
   <script>
-    /* ---- Tic Tac Toe ---- */
-    (()=>{const b=document.getElementById("ttt-board"),t=document.getElementById("ttt-turn"),r=document.getElementById("ttt-reset");let a=Array(9).fill(null),c="X",o=false;function e(){b.innerHTML="";for(let i=0;i<9;i++){const d=document.createElement("div");d.className="cell";d.textContent=a[i]||"";d.onclick=()=>{if(o||a[i])return;a[i]=c;c=c==="X"?"O":"X";f();e();};b.appendChild(d);}t.textContent=c}function f(){const w=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];for(const [x,y,z]of w){if(a[x]&&a[x]===a[y]&&a[x]===a[z]){o=true;alert("Kazanan: "+a[x]);return}}if(a.every(x=>x)){o=true;alert("Berabere!")}}r.onclick=()=>{a=Array(9).fill(null);c="X";o=false;e()};e();})();
+  (function () {
+    const $ = id => document.getElementById(id);
+    const oku = (k, v) => { try { return JSON.parse(localStorage.getItem(k)) ?? v; } catch (e) { return v; } };
+    const kaydet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
 
-    /* ---- RPS ---- */
-    (()=>{const b=document.querySelectorAll("#rps .button[data-move]"),c=document.getElementById("rps-comp"),r=document.getElementById("rps-result"),s=document.getElementById("rps-reset");function cpu(){return["rock","paper","scissors"][Math.floor(Math.random()*3)]}function win(p,k){if(p===k)return"Berabere";if((p==="rock"&&k==="scissors")||(p==="paper"&&k==="rock")||(p==="scissors"&&k==="paper"))return"Kazandın";return"Kaybettin"}b.forEach(x=>x.onclick=()=>{const p=x.dataset.move,k=cpu();c.textContent=k;r.textContent=win(p,k)});s.onclick=()=>{c.textContent="-";r.textContent="-"}})();
+    /* ---------- Sekmeler ---------- */
+    const sekmeler = [...document.querySelectorAll(".sekme")];
+    const durdurucular = {};
+    function sec(s, odak) {
+      sekmeler.forEach(x => {
+        const on = x === s;
+        x.setAttribute("aria-selected", on); x.tabIndex = on ? 0 : -1;
+        $(x.getAttribute("aria-controls")).hidden = !on;
+        if (!on && durdurucular[x.getAttribute("aria-controls")]) durdurucular[x.getAttribute("aria-controls")]();
+      });
+      if (odak) s.focus();
+      history.replaceState(null, "", "#" + s.getAttribute("aria-controls"));
+    }
+    sekmeler.forEach((s, i) => {
+      s.addEventListener("click", () => sec(s));
+      s.addEventListener("keydown", e => {
+        const ileri = ["ArrowDown", "ArrowRight"].includes(e.key), geri = ["ArrowUp", "ArrowLeft"].includes(e.key);
+        if (ileri || geri) { e.preventDefault(); sec(sekmeler[(i + (ileri ? 1 : -1) + sekmeler.length) % sekmeler.length], true); }
+      });
+    });
+    const ilk = sekmeler.find(s => "#" + s.getAttribute("aria-controls") === location.hash);
+    if (ilk) sec(ilk);
+    const gorunur = id => !$(id).hidden;
 
-    /* ---- Memory ---- */
-    (()=>{const b=document.getElementById("mem-board"),s=document.getElementById("mem-score"),r=document.getElementById("mem-reset");let v=[],f=null,p=0;function init(){v=["🍎","🍌","🍇","🍉","🍓","🍒","🍍","🥝"];v=v.concat(v).sort(()=>Math.random()-0.5);b.innerHTML="";p=0;s.textContent="0";for(let i=0;i<16;i++){const d=document.createElement("div");d.className="cell";d.textContent="";d.dataset.i=i;d.onclick=flip;b.appendChild(d)}}function flip(e){const i=e.currentTarget.dataset.i,d=b.children[i];if(d.classList.contains("open")||d.classList.contains("matched"))return;d.classList.add("open");d.textContent=v[i];if(!f){f={i,d};return}if(f.i===i)return;if(v[f.i]===v[i]){f.d.classList.add("matched");d.classList.add("matched");p++;s.textContent=p;if(p===8)alert("Tebrikler — Hepsini buldun!")}else{setTimeout(()=>{f.d.classList.remove("open");d.classList.remove("open");f.d.textContent="";d.textContent="";f=null},700);return}f=null}r.onclick=init;init();})();
+    /* ---------- Yılan ---------- */
+    (function () {
+      const c = $("yilanTuval"), x = c.getContext("2d");
+      const K = 20, SX = c.width / K, SY = c.height / K;
+      let yilan, yon, sonrakiYon, yem, skor, rekor = oku("ensYilanRekor", 0), calisiyor = false, bitti = false, zaman = 0, son = 0;
+      $("yilanRekor").textContent = rekor;
 
-    /* ---- Snake ---- */
-    (()=>{const c=document.getElementById("snake-canvas"),ctx=c.getContext("2d"),s=document.getElementById("snake-start"),r=document.getElementById("snake-reset"),sc=document.getElementById("snake-score");let W=c.width,H=c.height,S=12,snake,dir,food,score,timer;function rand(){return{x:Math.floor(Math.random()*(W/S)),y:Math.floor(Math.random()*(H/S))}}function place(){food=rand()}function init(){snake=[{x:5,y:5},{x:4,y:5},{x:3,y:5}];dir={x:1,y:0};score=0;sc.textContent=0;place();draw()}function draw(){ctx.clearRect(0,0,W,H);ctx.fillStyle="#00d9ff";snake.forEach(p=>ctx.fillRect(p.x*S,p.y*S,S-1,S-1));ctx.fillStyle="#ef4444";ctx.fillRect(food.x*S,food.y*S,S-1,S-1)}function step(){const h={x:snake[0].x+dir.x,y:snake[0].y+dir.y};if(h.x<0||h.x>=W/S||h.y<0||h.y>=H/S||snake.some(p=>p.x===h.x&&p.y===h.y)){clearInterval(timer);alert("Oyun bitti — Skor: "+score);return}snake.unshift(h);if(h.x===food.x&&h.y===food.y){score++;sc.textContent=score;place()}else snake.pop();draw()}document.addEventListener("keydown",e=>{if(e.key==="ArrowUp"&&dir.y===0)dir={x:0,y:-1};if(e.key==="ArrowDown"&&dir.y===0)dir={x:0,y:1};if(e.key==="ArrowLeft"&&dir.x===0)dir={x:-1,y:0};if(e.key==="ArrowRight"&&dir.x===0)dir={x:1,y:0}});s.onclick=()=>{clearInterval(timer);timer=setInterval(step,120)};r.onclick=()=>{clearInterval(timer);init()};init();})();
+      function kur() {
+        yilan = [{ x: 8, y: 10 }, { x: 7, y: 10 }, { x: 6, y: 10 }];
+        yon = sonrakiYon = { x: 1, y: 0 }; skor = 0; bitti = false;
+        $("yilanSkor").textContent = 0; yemKoy(); ciz();
+      }
+      function yemKoy() {
+        do { yem = { x: Math.floor(Math.random() * SX), y: Math.floor(Math.random() * SY) }; }
+        while (yilan.some(p => p.x === yem.x && p.y === yem.y));
+      }
+      function adim() {
+        yon = sonrakiYon;
+        const bas = { x: yilan[0].x + yon.x, y: yilan[0].y + yon.y };
+        if (bas.x < 0 || bas.y < 0 || bas.x >= SX || bas.y >= SY || yilan.some(p => p.x === bas.x && p.y === bas.y)) return bitir();
+        yilan.unshift(bas);
+        if (bas.x === yem.x && bas.y === yem.y) {
+          skor++; $("yilanSkor").textContent = skor;
+          if (skor > rekor) { rekor = skor; $("yilanRekor").textContent = rekor; kaydet("ensYilanRekor", rekor); }
+          yemKoy();
+        } else yilan.pop();
+      }
+      function bitir() {
+        calisiyor = false; bitti = true; $("yilanBasla").textContent = "Yeniden başlat"; ciz();
+      }
+      function ciz() {
+        x.fillStyle = "#13204a"; x.fillRect(0, 0, c.width, c.height);
+        x.fillStyle = "rgba(255,255,255,.05)";
+        for (let i = 0; i < SX; i++) for (let j = 0; j < SY; j++) if ((i + j) % 2) x.fillRect(i * K, j * K, K, K);
+        // yem: fener
+        x.fillStyle = "#ffb547"; x.beginPath(); x.arc(yem.x * K + K / 2, yem.y * K + K / 2, K / 2 - 3, 0, 7); x.fill();
+        yilan.forEach((p, i) => {
+          x.fillStyle = i === 0 ? "#ffffff" : `rgba(190,220,255,${1 - i / (yilan.length + 6)})`;
+          x.beginPath(); x.roundRect(p.x * K + 2, p.y * K + 2, K - 4, K - 4, 6); x.fill();
+        });
+        if (!calisiyor) {
+          x.fillStyle = "rgba(8,12,30,.55)"; x.fillRect(0, 0, c.width, c.height);
+          x.fillStyle = "#fff"; x.textAlign = "center"; x.font = "700 30px 'Bricolage Grotesque', system-ui, sans-serif";
+          x.fillText(bitti ? `Oyun bitti: ${skor}` : (skor ? "Durdu" : "Başlamak için dokun"), c.width / 2, c.height / 2 + 10);
+        }
+      }
+      function dongu(t) {
+        if (!calisiyor) return;
+        const hiz = Math.max(65, 130 - skor * 3);
+        if (t - son >= hiz) { son = t; adim(); ciz(); }
+        requestAnimationFrame(dongu);
+      }
+      function basla() {
+        if (bitti) kur();
+        if (calisiyor) { calisiyor = false; $("yilanBasla").textContent = "Devam et"; ciz(); return; }
+        calisiyor = true; $("yilanBasla").textContent = "Durdur"; requestAnimationFrame(dongu);
+      }
+      function cevir(nx, ny) {
+        if (nx === -yon.x && ny === -yon.y) return;
+        sonrakiYon = { x: nx, y: ny };
+        if (!calisiyor && !$("yilan").hidden) basla();
+      }
+      const YON = { yukari: [0, -1], asagi: [0, 1], sol: [-1, 0], sag: [1, 0] };
+      const TUS = { ArrowUp: "yukari", w: "yukari", W: "yukari", ArrowDown: "asagi", s: "asagi", S: "asagi", ArrowLeft: "sol", a: "sol", A: "sol", ArrowRight: "sag", d: "sag", D: "sag" };
+      document.addEventListener("keydown", e => {
+        if (!gorunur("yilan") || e.target.closest("input, button[role=tab]")) return;
+        if (TUS[e.key]) { e.preventDefault(); cevir(...YON[TUS[e.key]]); }
+        else if (e.key === " ") { e.preventDefault(); basla(); }
+      });
+      document.querySelectorAll(".yon button").forEach(b => b.addEventListener("click", () => cevir(...YON[b.dataset.y])));
+      let dx = 0, dy = 0;
+      c.addEventListener("pointerdown", e => { dx = e.clientX; dy = e.clientY; });
+      c.addEventListener("pointerup", e => {
+        const ax = e.clientX - dx, ay = e.clientY - dy;
+        if (Math.max(Math.abs(ax), Math.abs(ay)) < 20) { if (!calisiyor) basla(); return; }
+        Math.abs(ax) > Math.abs(ay) ? cevir(Math.sign(ax), 0) : cevir(0, Math.sign(ay));
+      });
+      $("yilanBasla").addEventListener("click", basla);
+      durdurucular.yilan = () => { if (calisiyor) basla(); };
+      kur();
+    })();
 
-    /* ---- Pong ---- */
-    (()=>{const c=document.getElementById("pong-canvas"),ctx=c.getContext("2d"),s=document.getElementById("pong-start"),r=document.getElementById("pong-reset"),sc=document.getElementById("pong-score");let W=c.width,H=c.height,L=(H-50)/2,R=(H-50)/2,ball={x:W/2,y:H/2,vx:3,vy:2,r:6},score=[0,0],timer,u=false,d=false;function draw(){ctx.clearRect(0,0,W,H);ctx.fillStyle="#fff";ctx.fillRect(10,L,8,50);ctx.fillRect(W-18,R,8,50);ctx.beginPath();ctx.arc(ball.x,ball.y,ball.r,0,Math.PI*2);ctx.fill();}function step(){if(ball.y>R+25)R+=2;else R-=2;if(u)L-=4;if(d)L+=4;L=Math.max(0,Math.min(H-50,L));R=Math.max(0,Math.min(H-50,R));ball.x+=ball.vx;ball.y+=ball.vy;if(ball.y<ball.r||ball.y>H-ball.r)ball.vy*=-1;if(ball.x-ball.r<=18&&ball.y>L&&ball.y<L+50)ball.vx*=-1;if(ball.x+ball.r>=W-18&&ball.y>R&&ball.y<R+50)ball.vx*=-1;if(ball.x<0){score[1]++;resetBall()}if(ball.x>W){score[0]++;resetBall()}sc.textContent=score[0]+" - "+score[1];draw()}function resetBall(){ball.x=W/2;ball.y=H/2;ball.vx=(Math.random()>0.5?3:-3);ball.vy=(Math.random()*4-2)}document.addEventListener("keydown",e=>{if(e.key.toLowerCase()==="w")u=true;if(e.key.toLowerCase()==="s")d=true});document.addEventListener("keyup",e=>{if(e.key.toLowerCase()==="w")u=false;if(e.key.toLowerCase()==="s")d=false});s.onclick=()=>{clearInterval(timer);timer=setInterval(step,16)};r.onclick=()=>{clearInterval(timer);score=[0,0];sc.textContent="0 - 0";resetBall();draw()};resetBall();draw();})();
+    /* ---------- Pong ---------- */
+    (function () {
+      const c = $("pongTuval"), x = c.getContext("2d"), W = c.width, H = c.height;
+      const RY = 70, RG = 10, HEDEF = 7;
+      let sen, pc, top, puanS = 0, puanP = 0, calisiyor = false, tuslar = {}, son = 0, mesaj = "Başlamak için dokun";
+
+      function sifirla(yonX) {
+        const aci = (Math.random() * .8 - .4);
+        top = { x: W / 2, y: H / 2, vx: 260 * (yonX || (Math.random() < .5 ? -1 : 1)), vy: 260 * Math.sin(aci), r: 7 };
+      }
+      function kur() { sen = H / 2 - RY / 2; pc = H / 2 - RY / 2; puanS = puanP = 0; yaz(); sifirla(); }
+      function yaz() { $("pongSen").textContent = puanS; $("pongPc").textContent = puanP; }
+
+      function guncelle(dt) {
+        const hiz = 360;
+        if (tuslar.yukari) sen -= hiz * dt;
+        if (tuslar.asagi) sen += hiz * dt;
+        sen = Math.max(0, Math.min(H - RY, sen));
+        // bilgisayar: biraz gecikmeli takip
+        const hedefY = top.y - RY / 2;
+        pc += Math.max(-230 * dt, Math.min(230 * dt, hedefY - pc));
+        pc = Math.max(0, Math.min(H - RY, pc));
+
+        top.x += top.vx * dt; top.y += top.vy * dt;
+        if (top.y < top.r) { top.y = top.r; top.vy *= -1; }
+        if (top.y > H - top.r) { top.y = H - top.r; top.vy *= -1; }
+        const carp = (rx, ry, yon) => {
+          if (top.y > ry - top.r && top.y < ry + RY + top.r) {
+            const orta = (top.y - (ry + RY / 2)) / (RY / 2);
+            const hiz = Math.min(620, Math.hypot(top.vx, top.vy) * 1.06);
+            top.vx = yon * hiz * Math.cos(orta * .9); top.vy = hiz * Math.sin(orta * .9);
+            top.x = rx; return true;
+          }
+          return false;
+        };
+        if (top.vx < 0 && top.x - top.r <= 18 + RG && top.x > 10) carp(18 + RG + top.r, sen, 1);
+        if (top.vx > 0 && top.x + top.r >= W - 18 - RG && top.x < W - 10) carp(W - 18 - RG - top.r, pc, -1);
+        if (top.x < -20) { puanP++; yaz(); sayi(1); }
+        if (top.x > W + 20) { puanS++; yaz(); sayi(-1); }
+      }
+      function sayi(yon) {
+        if (puanS >= HEDEF || puanP >= HEDEF) {
+          mesaj = puanS > puanP ? "Kazandın!" : "Bilgisayar kazandı";
+          calisiyor = false; $("pongBasla").textContent = "Yeniden oyna";
+          kaydetBitti = true;
+        }
+        sifirla(yon);
+      }
+      let kaydetBitti = false;
+      function ciz() {
+        x.fillStyle = "#13204a"; x.fillRect(0, 0, W, H);
+        x.strokeStyle = "rgba(255,255,255,.18)"; x.setLineDash([8, 10]); x.lineWidth = 2;
+        x.beginPath(); x.moveTo(W / 2, 0); x.lineTo(W / 2, H); x.stroke(); x.setLineDash([]);
+        x.fillStyle = "#cfe3ff"; x.beginPath(); x.roundRect(18, sen, RG, RY, 5); x.fill();
+        x.fillStyle = "#ffb547"; x.beginPath(); x.roundRect(W - 18 - RG, pc, RG, RY, 5); x.fill();
+        x.fillStyle = "#fff"; x.beginPath(); x.arc(top.x, top.y, top.r, 0, 7); x.fill();
+        if (!calisiyor) {
+          x.fillStyle = "rgba(8,12,30,.55)"; x.fillRect(0, 0, W, H);
+          x.fillStyle = "#fff"; x.textAlign = "center"; x.font = "700 28px 'Bricolage Grotesque', system-ui, sans-serif";
+          x.fillText(mesaj, W / 2, H / 2 + 10);
+        }
+      }
+      function dongu(t) {
+        if (!calisiyor) { ciz(); return; }
+        const dt = Math.min(.033, (t - son) / 1000); son = t;
+        guncelle(dt); ciz(); requestAnimationFrame(dongu);
+      }
+      function basla() {
+        if (calisiyor) { calisiyor = false; mesaj = "Durdu"; $("pongBasla").textContent = "Devam et"; return; }
+        if (kaydetBitti) { kaydetBitti = false; kur(); }
+        calisiyor = true; $("pongBasla").textContent = "Durdur";
+        son = performance.now(); requestAnimationFrame(dongu);
+      }
+      const TUS = { w: "yukari", W: "yukari", ArrowUp: "yukari", s: "asagi", S: "asagi", ArrowDown: "asagi" };
+      document.addEventListener("keydown", e => {
+        if (!gorunur("pong") || e.target.closest("button[role=tab]")) return;
+        if (TUS[e.key]) { e.preventDefault(); tuslar[TUS[e.key]] = true; }
+        if (e.key === " ") { e.preventDefault(); basla(); }
+      });
+      document.addEventListener("keyup", e => { if (TUS[e.key]) tuslar[TUS[e.key]] = false; });
+      const tasi = e => {
+        const r = c.getBoundingClientRect();
+        sen = Math.max(0, Math.min(H - RY, (e.clientY - r.top) * (H / r.height) - RY / 2));
+        if (!calisiyor) ciz();
+      };
+      c.addEventListener("pointermove", tasi);
+      c.addEventListener("pointerdown", e => { tasi(e); if (!calisiyor) basla(); });
+      $("pongBasla").addEventListener("click", basla);
+      durdurucular.pong = () => { if (calisiyor) basla(); };
+      kur(); ciz();
+    })();
+
+    /* ---------- Tic Tac Toe ---------- */
+    (function () {
+      const tahta = $("xoxTahta"), durum = $("xoxDurum");
+      const HATLAR = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+      let a, sira, bitti, rakip = "pc", ilkOyuncu = "X", skor = oku("ensXox", { X: 0, O: 0, B: 0 });
+      const btn = [...Array(9)].map((_, i) => {
+        const b = document.createElement("button"); b.type = "button"; b.setAttribute("aria-label", `Kare ${i + 1}`);
+        b.addEventListener("click", () => oyna(i)); tahta.appendChild(b); return b;
+      });
+      const skorYaz = () => { $("xoxX").textContent = skor.X; $("xoxO").textContent = skor.O; $("xoxB").textContent = skor.B; };
+      const kazanan = t => { for (const h of HATLAR) if (t[h[0]] && t[h[0]] === t[h[1]] && t[h[0]] === t[h[2]]) return h; return null; };
+      function yeni() {
+        a = Array(9).fill(null); sira = ilkOyuncu; bitti = false;
+        btn.forEach(b => { b.textContent = ""; b.className = ""; b.disabled = false; });
+        durumYaz();
+        if (rakip === "pc" && sira === "O") setTimeout(pcOyna, 350);
+      }
+      function durumYaz() { durum.textContent = rakip === "pc" ? (sira === "X" ? "Sıra sende: X" : "Bilgisayar düşünüyor…") : `Sıra: ${sira}`; }
+      function oyna(i) {
+        if (bitti || a[i] || (rakip === "pc" && sira === "O")) return;
+        koy(i);
+        if (!bitti && rakip === "pc") setTimeout(pcOyna, 350);
+      }
+      function koy(i) {
+        a[i] = sira; btn[i].textContent = sira; btn[i].classList.add(sira.toLowerCase()); btn[i].disabled = true;
+        const h = kazanan(a);
+        if (h) {
+          bitti = true; h.forEach(k => btn[k].classList.add("kazandi"));
+          skor[sira]++; durum.textContent = rakip === "pc" ? (sira === "X" ? "Kazandın!" : "Bilgisayar kazandı.") : `${sira} kazandı!`;
+        } else if (a.every(Boolean)) { bitti = true; skor.B++; durum.textContent = "Berabere."; }
+        if (bitti) { btn.forEach(b => b.disabled = true); kaydet("ensXox", skor); skorYaz(); ilkOyuncu = ilkOyuncu === "X" ? "O" : "X"; return; }
+        sira = sira === "X" ? "O" : "X"; durumYaz();
+      }
+      function minimax(t, oyuncu, derinlik) {
+        const h = kazanan(t);
+        if (h) return t[h[0]] === "O" ? 10 - derinlik : derinlik - 10;
+        if (t.every(Boolean)) return 0;
+        let en = oyuncu === "O" ? -99 : 99;
+        for (let i = 0; i < 9; i++) if (!t[i]) {
+          t[i] = oyuncu; const s = minimax(t, oyuncu === "O" ? "X" : "O", derinlik + 1); t[i] = null;
+          en = oyuncu === "O" ? Math.max(en, s) : Math.min(en, s);
+        }
+        return en;
+      }
+      function pcOyna() {
+        if (bitti) return;
+        const bos = a.map((v, i) => v ? -1 : i).filter(i => i >= 0);
+        let secim;
+        if (Math.random() < .2) secim = bos[Math.floor(Math.random() * bos.length)]; // ara sıra hata yapsın
+        else {
+          let en = -99;
+          for (const i of bos) { a[i] = "O"; const s = minimax(a, "X", 0); a[i] = null; if (s > en) { en = s; secim = i; } }
+        }
+        koy(secim);
+      }
+      document.querySelectorAll("[data-rakip]").forEach(b => b.addEventListener("click", () => {
+        rakip = b.dataset.rakip; ilkOyuncu = "X";
+        document.querySelectorAll("[data-rakip]").forEach(x => x.setAttribute("aria-pressed", x === b));
+        yeni();
+      }));
+      $("xoxYeni").addEventListener("click", yeni);
+      skorYaz(); yeni();
+    })();
+
+    /* ---------- Taş kâğıt makas ---------- */
+    (function () {
+      const EMO = { tas: "✊", kagit: "✋", makas: "✌️" }, AD = { tas: "Taş", kagit: "Kâğıt", makas: "Makas" };
+      const YENER = { tas: "makas", kagit: "tas", makas: "kagit" };
+      const NEDEN = { tas: "Taş makası kırar.", kagit: "Kâğıt taşı sarar.", makas: "Makas kâğıdı keser." };
+      let skor = oku("ensTkm", { sen: 0, pc: 0 });
+      const yaz = () => { $("tkmSen").textContent = skor.sen; $("tkmPc").textContent = skor.pc; };
+      document.querySelectorAll(".tkm button").forEach(b => b.addEventListener("click", () => {
+        const s = b.dataset.s, p = Object.keys(EMO)[Math.floor(Math.random() * 3)];
+        let sonuc;
+        if (s === p) sonuc = `Berabere: ikiniz de ${AD[s].toLocaleLowerCase("tr-TR")} seçtiniz.`;
+        else if (YENER[s] === p) { skor.sen++; sonuc = `Kazandın! ${NEDEN[s]}`; }
+        else { skor.pc++; sonuc = `Kaybettin. ${NEDEN[p]}`; }
+        $("tkmDurum").textContent = sonuc;
+        $("tkmSahne").innerHTML = `<span>${EMO[s]}</span><small>sen</small><small>—</small><small>bilgisayar</small><span>${EMO[p]}</span>`;
+        kaydet("ensTkm", skor); yaz();
+      }));
+      $("tkmSifirla").addEventListener("click", () => { skor = { sen: 0, pc: 0 }; kaydet("ensTkm", skor); yaz(); $("tkmDurum").textContent = "Seçimini yap."; $("tkmSahne").innerHTML = ""; });
+      yaz();
+    })();
+
+    /* ---------- Eşleştirme ---------- */
+    (function () {
+      const RESIM = ["❄️", "⛄", "🏮", "🧣", "🛷", "🌲", "🦉", "🌅"];
+      const tahta = $("esTahta");
+      let acik = [], kilit = false, hamle = 0, cift = 0, rekor = oku("ensEsRekor", null);
+      $("esRekor").textContent = rekor ?? "–";
+      function yeni() {
+        const deste = [...RESIM, ...RESIM].map(r => ({ r, s: Math.random() })).sort((a, b) => a.s - b.s).map(o => o.r);
+        tahta.innerHTML = ""; acik = []; kilit = false; hamle = 0; cift = 0;
+        $("esHamle").textContent = 0; $("esCift").textContent = 0; $("esDurum").textContent = "Kartları çevir, aynı resimleri bul.";
+        deste.forEach(r => {
+          const b = document.createElement("button"); b.type = "button"; b.className = "eslesme"; b.dataset.r = r;
+          b.setAttribute("aria-label", "Kapalı kart");
+          b.innerHTML = `<span class="arka"></span><span class="on">${r}</span>`;
+          b.addEventListener("click", () => cevir(b));
+          tahta.appendChild(b);
+        });
+      }
+      function cevir(b) {
+        if (kilit || b.classList.contains("acik") || b.classList.contains("tamam")) return;
+        b.classList.add("acik"); b.setAttribute("aria-label", b.dataset.r); acik.push(b);
+        if (acik.length < 2) return;
+        hamle++; $("esHamle").textContent = hamle;
+        const [k1, k2] = acik;
+        if (k1.dataset.r === k2.dataset.r) {
+          k1.classList.add("tamam"); k2.classList.add("tamam"); acik = []; cift++; $("esCift").textContent = cift;
+          if (cift === RESIM.length) {
+            const yeniRekor = rekor === null || hamle < rekor;
+            if (yeniRekor) { rekor = hamle; kaydet("ensEsRekor", rekor); $("esRekor").textContent = rekor; }
+            $("esDurum").textContent = `Hepsini ${hamle} hamlede buldun${yeniRekor ? ", yeni rekor!" : "."}`;
+          }
+        } else {
+          kilit = true;
+          setTimeout(() => { [k1, k2].forEach(k => { k.classList.remove("acik"); k.setAttribute("aria-label", "Kapalı kart"); }); acik = []; kilit = false; }, 750);
+        }
+      }
+      $("esYeni").addEventListener("click", yeni);
+      yeni();
+    })();
+  })();
   </script>
 </body>
 </html>
