@@ -5,19 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hakkımda · ENS Developer</title>
   <meta name="description" content="ENS Developer hakkında: kışı seven, Türk masallarından ilham alan oyunlar ve uygulamalar yapan bir geliştirici.">
-  <meta name="theme-color" content="#eef3f9">
+  <meta name="theme-color" content="#060c1d">
   <link rel="icon" href="ayaz-feneri/icons/icon-192.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="ortak.css">
+  <script>document.documentElement.classList.add("js");</script>
   <style>
     .bas { padding: 64px 0 8px; max-width: 760px; }
     .bas h1 { font-size: clamp(2.4rem, 7vw, 4.6rem); font-weight: 800; letter-spacing: -.045em; line-height: 1; }
     .bas p { margin-top: 20px; font-size: clamp(1.05rem, 2vw, 1.2rem); color: var(--soluk); }
 
     .rakamlar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin-top: 44px; background: var(--cizgi); border: 1px solid var(--cizgi); border-radius: 22px; overflow: hidden; }
-    .rakamlar div { background: var(--yuzey); padding: 22px 22px 20px; }
+    .rakamlar div { padding: 22px 22px 20px; }
     .rakamlar b { display: block; font-family: var(--yazi-baslik); font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; letter-spacing: -.04em; line-height: 1; }
     .rakamlar span { color: var(--soluk); font-size: .92rem; }
 
@@ -46,16 +47,27 @@
       .ikili { grid-template-columns: 1fr; gap: 40px; }
       .iletisim .dugmeler { margin-left: 0; }
     }
+    .bas h1 .isil { background: linear-gradient(100deg, #bfeaff 10%, var(--buz) 40%, #fff 50%, var(--buz) 60%, #bfeaff 90%); background-size: 250% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: isilti 6s linear infinite; }
+    @keyframes isilti { to { background-position: -250% 0; } }
+    .el { display: inline-block; transform-origin: 70% 70%; animation: salla 2.5s ease-in-out infinite; }
+    @keyframes salla { 0%, 60%, 100% { transform: rotate(0); } 10%, 30% { transform: rotate(14deg); } 20%, 40% { transform: rotate(-8deg); } }
+    .rakamlar div { background: var(--yuzey-dolu); transition: background .3s; }
+    .rakamlar div:hover { background: #16264f; }
+    .rakamlar b { color: var(--metin); text-shadow: 0 0 24px rgba(0, 217, 255, .35); }
+    .araclar span { transition: transform .3s cubic-bezier(.3, 1.6, .5, 1), border-color .2s, color .2s; }
+    .araclar span:hover { transform: translateY(-3px) rotate(-3deg); border-color: var(--buz); color: var(--buz); }
+    .iletisim { position: relative; background: linear-gradient(140deg, rgba(255, 181, 71, .18), rgba(18, 32, 66, .7) 60%) !important; border: 1px solid rgba(255, 181, 71, .3); backdrop-filter: blur(8px); }
   </style>
 </head>
 <body>
+  <div class="gok" aria-hidden="true"><i></i><i></i><i></i></div>
   <canvas id="kar" aria-hidden="true"></canvas>
 
   <header class="ust">
     <div class="sar">
       <a class="logo" href="./" aria-label="ENS Developer ana sayfa">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 2v20M3.3 7l17.4 10M3.3 17L20.7 7M9 4l3 2 3-2M9 20l3-2 3 2M4 10.5l2.7-.7-.9-2.6M20 13.5l-2.7.7.9 2.6M4 13.5l2.7.7-.9 2.6M20 10.5l-2.7-.7.9-2.6"/></svg>
-        ENS Developer
+        ENS <span>DEVELOPER</span>
       </a>
       <nav class="menu" aria-label="Ana menü">
         <a href="./#projeler">Projeler</a>
@@ -64,17 +76,16 @@
         <a href="#iletisim">İletişim</a>
         <a href="https://github.com/Enskygr234">GitHub</a>
       </nav>
-      <button class="tema-dugme" type="button" aria-label="Temayı değiştir">☾</button>
     </div>
   </header>
 
   <main class="sar">
-    <section class="bas">
-      <h1>Merhaba, ben ENS.</h1>
+    <section class="bas" data-belir>
+      <h1><span class="el" aria-hidden="true">👋</span> Merhaba, ben <span class="isil">ENS.</span></h1>
       <p>Bilgisayara ve yazılım geliştirmeye büyük ilgi duyan, kışı seven bir geliştiriciyim. Bu siteyi projelerimi paylaşmak, öğrendiklerimi göstermek ve biraz da kendimi anlatmak için kurdum.</p>
     </section>
 
-    <div class="rakamlar" aria-label="Sayılarla">
+    <div class="rakamlar" aria-label="Sayılarla" data-belir="buyu">
       <div><b data-sayi="proje">–</b><span>proje</span></div>
       <div><b data-sayi="oyun">–</b><span>oyun</span></div>
       <div><b data-sayi="apk">–</b><span>Android uygulaması</span></div>
@@ -82,7 +93,7 @@
     </div>
 
     <div class="ikili">
-      <section class="metin">
+      <section class="metin" data-belir="sol">
         <h2>Neden kış?</h2>
         <p>Kışı, karı ve Türk masallarını seviyorum. Yaptığım her şeye biraz ayaz katıyorum: oyunlarımda Karakoncolos, Ayaz Ata, Albastı ve Tepegöz dolaşıyor; sayaçlarım Nardugan'a, yani güneşin yeniden doğduğu kış gündönümüne doğru işliyor.</p>
         <p>Hedefim kendi yazılım projelerimi büyütmek, açık kaynak topluluklarına katkıda bulunmak ve web ile mobil teknolojilerde ustalaşmak. Projelerimin hepsinin kaynak kodu GitHub'da açık.</p>
@@ -93,19 +104,19 @@
         </div>
       </section>
 
-      <section>
+      <section data-belir="sag">
         <h2>Neler yapıyorum?</h2>
         <div class="liste" id="liste"></div>
       </section>
     </div>
 
-    <section class="iletisim" id="iletisim">
+    <section class="iletisim" id="iletisim" data-belir data-egim="3">
       <div>
         <h2>Bir fikrin mi var?</h2>
         <p>Öneri, hata bildirimi ya da sadece selam için yaz.</p>
       </div>
       <div class="dugmeler">
-        <a class="dugme fener" href="mailto:ensygk115@gmail.com">ensygk115@gmail.com</a>
+        <a class="dugme fener parla" href="mailto:ensygk115@gmail.com">ensygk115@gmail.com</a>
         <a class="dugme" href="https://github.com/Enskygr234">GitHub profilim</a>
       </div>
     </section>
@@ -124,13 +135,19 @@
   <script>
     (function () {
       const P = window.PROJELER, G = window.GRUPLAR;
-      const yaz = (k, n) => document.querySelectorAll(`[data-sayi="${k}"]`).forEach(e => e.textContent = n);
-      yaz("proje", P.length);
-      yaz("oyun", P.filter(p => p.grup === "oyun").length);
-      yaz("apk", P.filter(p => p.linkler.some(l => l.tip === "apk")).length);
-      yaz("windows", P.filter(p => p.tur.includes("windows")).length);
-      document.getElementById("liste").innerHTML = G.map(g => `
-        <div><h3>${g.ad}</h3><p>${P.filter(p => p.grup === g.id).map(p => `<a href="./#${p.id}">${p.ad}</a>`).join(", ")}</p></div>`).join("");
+            const hedefler = {
+        proje: P.length,
+        oyun: P.filter(p => p.grup === "oyun").length,
+        apk: P.filter(p => p.linkler.some(l => l.tip === "apk")).length,
+        windows: P.filter(p => p.tur.includes("windows")).length
+      };
+      document.querySelectorAll("[data-sayi]").forEach(e => { e.textContent = "0"; e.dataset.hedef = hedefler[e.dataset.sayi]; });
+      ENS.sayaclariKur(document.querySelector(".rakamlar"));
+      document.getElementById("liste").innerHTML = G.map((g, i) => `
+        <div data-belir style="--gecikme:${i * 110}ms"><h3>${g.ad}</h3><p>${P.filter(p => p.grup === g.id).map(p => `<a href="./#${p.id}">${p.ad}</a>`).join(", ")}</p></div>`).join("");
+      ENS.belirt(document.getElementById("liste"));
+      document.querySelectorAll(".araclar span").forEach((s, i) => { s.dataset.belir = "buyu"; s.style.setProperty("--gecikme", i * 45 + "ms"); });
+      ENS.belirt(document.querySelector(".araclar"));
     })();
   </script>
 </body>
