@@ -63,6 +63,8 @@ Yılan, Pong, Tic Tac Toe, Taş Kâğıt Makas ve Eşleştirme: [oyunlar sayfas�
 | `index.html` | Ana sayfa |
 | `hakkımda.html` | Hakkımda sayfası |
 | `oyunlar.html` | Tarayıcı oyunları |
+| `projeler.js` | Bütün projelerin listesi; yeni proje buraya eklenir, kartlar ve sayılar otomatik oluşur |
+| `ortak.css`, `ortak.js` | Üç sayfanın ortak tasarımı, tema düğmesi ve kar yağışı |
 | `ayaz-feneri/` | Ayaz Ata'nın Feneri oyunu |
 | `tarifler/` | Yemek Tarifleri uygulaması |
 | `.github/workflows/` | Siteyi yayınlayan ve APK'ları derleyen otomatik işler |
