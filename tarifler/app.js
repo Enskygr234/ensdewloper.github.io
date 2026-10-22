@@ -16,8 +16,18 @@
   const saveUser = () => store.set("tarif.user", userRecipes);
   const saveFavs = () => store.set("tarif.favs", [...favs]);
 
+  // Dünya mutfağından açılan tarifler (favoriler ve son açılanlar internetsiz de görünsün diye saklanır)
+  let apiRecipes = store.get("tarif.api", {});
+  function saveApi() {
+    const ids = Object.keys(apiRecipes);
+    const silinecek = ids.filter(id => !favs.has(id)).slice(0, Math.max(0, ids.length - 40));
+    silinecek.forEach(id => delete apiRecipes[id]);
+    store.set("tarif.api", apiRecipes);
+  }
+  function putApi(r) { delete apiRecipes[r.id]; apiRecipes[r.id] = r; saveApi(); }
+
   const allRecipes = () => [...userRecipes, ...DEFAULT_RECIPES];
-  const findRecipe = id => allRecipes().find(r => r.id === id);
+  const findRecipe = id => allRecipes().find(r => r.id === id) || apiRecipes[id];
   const isUserRecipe = id => userRecipes.some(r => r.id === id);
 
   // ---------- Yardımcılar ----------
@@ -124,21 +134,41 @@
     document.querySelectorAll(".tabbar button").forEach(b => b.classList.toggle("active", b.dataset.tab === name));
   }
   document.querySelectorAll(".tabbar button").forEach(b => {
-    b.onclick = () => { location.hash = { list: "#/", favs: "#/favs", add: "#/add" }[b.dataset.tab]; };
+    b.onclick = () => { location.hash = { list: "#/", kesfet: "#/kesfet", dolap: "#/dolap", favs: "#/favs", add: "#/add" }[b.dataset.tab]; };
   });
 
   // ---------- Liste ----------
   let listState = { q: "", cat: "Tümü" };
 
-  function cardHTML(r) {
+  function cardHTML(r, rozet = "") {
+    const thumb = r.img
+      ? `<img src="${esc(r.img)}/preview" alt="" loading="lazy" onerror="this.onerror=null;this.src='${esc(r.img)}'">`
+      : esc(r.emoji || "🍽️");
     return `<button class="card" data-id="${esc(r.id)}">
-      <div class="thumb">${esc(r.emoji || "🍽️")}</div>
+      <div class="thumb${r.img ? " photo" : ""}">${thumb}</div>
       <div class="card-body">
         <h3>${esc(r.name)}</h3>
-        <div class="meta"><span>⏱ ${r.time} dk</span><span>👥 ${r.servings} kişilik</span><span>${esc(r.cat)}</span></div>
+        <div class="meta">${r.time ? `<span>⏱ ${r.time} dk</span>` : ""}${r.area ? `<span>🌍 ${esc(r.area)}</span>` : `<span>👥 ${r.servings} kişilik</span>`}<span>${esc(r.cat)}</span></div>
+        ${rozet}
       </div>
       ${favs.has(r.id) ? '<span class="heart">♥</span>' : ""}
     </button>`;
+  }
+  // Dünya mutfağı arama sonucu kartı (henüz açılmamış, özet bilgi)
+  function apiCardHTML(x, rozet = "") {
+    const kayitli = apiRecipes[x.id];
+    const ad = (kayitli && kayitli.tr && kayitli.name) || x.name || Dunya.hazirAd(x.nameEn) || x.nameEn;
+    return cardHTML({ id: x.id, name: ad, img: x.img, area: x.area || (kayitli && kayitli.area) || "Dünya", cat: x.cat || (kayitli && kayitli.cat) || "", time: kayitli && kayitli.time }, rozet);
+  }
+  function adlariGuncelle(kutu, liste) {
+    const cevrilecek = liste.filter(x => !Dunya.hazirAd(x.nameEn) && !(apiRecipes[x.id] && apiRecipes[x.id].tr)).slice(0, 30);
+    if (!cevrilecek.length) return;
+    Dunya.adlariCevir(cevrilecek).then(l => {
+      for (const x of l) {
+        const h = kutu.querySelector(`.card[data-id="${CSS.escape(x.id)}"] h3`);
+        if (h && x.name) h.textContent = x.name;
+      }
+    });
   }
   function bindCards() {
     app.querySelectorAll(".card").forEach(c => { c.onclick = () => (location.hash = "#/r/" + encodeURIComponent(c.dataset.id)); });
@@ -176,7 +206,7 @@
 
   function renderFavs() {
     setHeader("Favoriler"); setTab("favs");
-    const list = allRecipes().filter(r => favs.has(r.id));
+    const list = [...allRecipes(), ...Object.values(apiRecipes)].filter(r => favs.has(r.id));
     app.innerHTML = list.length
       ? `<div class="grid">${list.map(cardHTML).join("")}</div>`
       : `<div class="empty"><span class="big">♡</span>Henüz favorin yok.<br>Bir tarifi açıp sağ üstteki kalbe dokun.</div>`;
@@ -187,20 +217,57 @@
   const checked = {}; // tarif id → { ing:Set, step:Set }
   const servingsState = {};
 
+  const ceviriDurum = {}; // tarif id → "busy" | "fail"
+  const orijinal = {};    // tarif id → İngilizce aslı gösterilsin mi
+
+  function yukleniyor(mesaj) {
+    return `<div class="empty"><span class="spinner" aria-hidden="true"></span>${esc(mesaj)}</div>`;
+  }
+  function hataHTML(mesaj) {
+    return `<div class="empty"><span class="big">📡</span>${esc(mesaj)}<br><button class="btn secondary retry" id="retry">Tekrar dene</button></div>`;
+  }
+
   function renderRecipe(id) {
-    const r = findRecipe(id);
+    let r = findRecipe(id);
+    if (!r && id.startsWith("m-")) {
+      setHeader("Tarif", { back: true }); setTab(null);
+      app.innerHTML = yukleniyor("Tarif getiriliyor…");
+      Dunya.getir(id.slice(2)).then(rec => {
+        if (!rec) { app.innerHTML = `<div class="empty"><span class="big">🤷</span>Bu tarif bulunamadı.</div>`; return; }
+        putApi(rec);
+        if (location.hash === "#/r/" + encodeURIComponent(id)) renderRecipe(id);
+      }).catch(() => {
+        app.innerHTML = hataHTML("Tarif yüklenemedi. İnternet bağlantını kontrol et.");
+        $("#retry").onclick = () => renderRecipe(id);
+      });
+      return;
+    }
     if (!r) { location.hash = "#/"; return; }
+    if (r.api) apiCeviriBaslat(r);
+    const ingil = r.api && orijinal[id];
+    const malzemeler = ingil ? r.ingredientsEn : r.ingredients;
+    const adimlar = ingil ? r.steps.map((s, i) => ({ ...s, t: r.stepsEn[i] })) : r.steps;
+    const besin = Besin.hesapla(r.calc || r.ingredients, r.servings);
     setHeader(r.name, { back: true, favId: r.id }); setTab(null);
     const st = checked[id] || (checked[id] = { ing: new Set(), step: new Set() });
     const sv = servingsState[id] || r.servings;
     const factor = sv / r.servings;
 
     app.innerHTML = `
-      <div class="hero">
-        <div class="emoji">${esc(r.emoji || "🍽️")}</div>
-        <h2>${esc(r.name)}</h2>
-        <div class="meta"><span>⏱ ${r.time} dk</span><span>${esc(r.cat)}</span></div>
+      <div class="hero${r.img ? " has-img" : ""}">
+        ${r.img ? `<img class="hero-img" src="${esc(r.img)}" alt="${esc(r.name)}">` : `<div class="emoji">${esc(r.emoji || "🍽️")}</div>`}
+        <h2>${esc(ingil ? r.nameEn : r.name)}</h2>
+        <div class="meta">${r.time ? `<span>⏱ ${r.time} dk</span>` : ""}${r.area ? `<span>🌍 ${esc(r.area)} mutfağı</span>` : ""}<span>${esc(r.cat)}</span></div>
       </div>
+      ${r.api ? ceviriBandi(r) : ""}
+
+      ${besin.bulunan ? `<div class="nutri">
+        <div class="kcal"><b>${besin.kcal}</b><span>kcal / porsiyon</span></div>
+        <div class="macro"><b>${besin.p} g</b><span>Protein</span></div>
+        <div class="macro"><b>${besin.k} g</b><span>Karbonhidrat</span></div>
+        <div class="macro"><b>${besin.y} g</b><span>Yağ</span></div>
+        <p>Yaklaşık değer · ${besin.toplam} malzemenin ${besin.bulunan} tanesi hesaba katıldı${r.api ? " · 4 porsiyon varsayıldı" : ""}</p>
+      </div>` : ""}
 
       <div class="section-title">
         <h3>Malzemeler</h3>
@@ -211,12 +278,12 @@
         </div>
       </div>
       <ul class="ingredients">
-        ${r.ingredients.map((ing, i) => `<li><label><input type="checkbox" data-ing="${i}" ${st.ing.has(i) ? "checked" : ""}><span>${scaleIngredient(ing, factor)}</span></label></li>`).join("")}
+        ${malzemeler.map((ing, i) => `<li><label><input type="checkbox" data-ing="${i}" ${st.ing.has(i) ? "checked" : ""}><span>${scaleIngredient(ing, factor)}</span></label></li>`).join("")}
       </ul>
 
       <div class="section-title"><h3>Yapılışı</h3></div>
       <ol class="steps">
-        ${r.steps.map((s, i) => {
+        ${adimlar.map((s, i) => {
           const key = timerKey(r.id, i);
           const label = s.dk ? `${s.dk} dk zamanlayıcı` : "";
           const running = timers[key];
@@ -230,6 +297,11 @@
       </ol>
 
       <label class="switch"><span>☀️ Pişirirken ekran açık kalsın</span><input type="checkbox" id="awake" ${keepAwake ? "checked" : ""}></label>
+
+      ${r.youtube || r.source ? `<div class="links">
+        ${r.youtube ? `<a class="btn secondary" href="${esc(r.youtube)}" target="_blank" rel="noopener">▶ Videosunu izle</a>` : ""}
+        ${r.source ? `<a class="btn secondary" href="${esc(r.source)}" target="_blank" rel="noopener">Kaynak site</a>` : ""}
+      </div>` : ""}
 
       <div class="row-actions">
         <button class="btn secondary" id="shareBtn">Paylaş</button>
@@ -276,12 +348,19 @@
 
     $("#shareBtn").onclick = async () => {
       const text = `${r.name} (${sv} kişilik)\n\nMalzemeler:\n` +
-        r.ingredients.map(i => "• " + scaleIngredient(i, factor).replace(/<\/?b>/g, "")).join("\n") +
-        `\n\nYapılışı:\n` + r.steps.map((s, i) => `${i + 1}. ${s.t}`).join("\n");
+        malzemeler.map(i => "• " + scaleIngredient(i, factor).replace(/<\/?b>/g, "")).join("\n") +
+        `\n\nYapılışı:\n` + adimlar.map((s, i) => `${i + 1}. ${s.t}`).join("\n") +
+        (r.source ? `\n\nKaynak: ${r.source}` : "");
       try {
         if (navigator.share) await navigator.share({ title: r.name, text });
         else { await navigator.clipboard.writeText(text); toast("Tarif panoya kopyalandı"); }
       } catch { /* kullanıcı vazgeçti */ }
+    };
+    const cb = $("#ceviriBtn");
+    if (cb) cb.onclick = () => {
+      if (ceviriDurum[id] === "fail") { delete ceviriDurum[id]; }
+      else orijinal[id] = !orijinal[id];
+      renderRecipe(id);
     };
     if (isUserRecipe(r.id)) {
       $("#editBtn").onclick = () => (location.hash = "#/edit/" + encodeURIComponent(r.id));
@@ -293,6 +372,173 @@
         location.hash = "#/";
       };
     }
+  }
+
+  function ceviriBandi(r) {
+    const d = ceviriDurum[r.id];
+    if (!r.tr && d === "busy") return `<div class="note"><span class="spinner small" aria-hidden="true"></span>Türkçeye çevriliyor…</div>`;
+    if (!r.tr && d === "fail") return `<div class="note warn">Çeviri şu an yapılamadı, tarif İngilizce gösteriliyor.<button id="ceviriBtn">Tekrar dene</button></div>`;
+    if (r.tr) return `<div class="note">🇹🇷 Otomatik çeviri<button id="ceviriBtn">${orijinal[r.id] ? "Türkçesini göster" : "Orijinalini göster"}</button></div>`;
+    return "";
+  }
+  function apiCeviriBaslat(r) {
+    if (r.tr || ceviriDurum[r.id]) return;
+    ceviriDurum[r.id] = "busy";
+    const hash = "#/r/" + encodeURIComponent(r.id);
+    Dunya.tarifCevir(r).then(yeni => {
+      delete ceviriDurum[r.id];
+      putApi(yeni);
+      if (location.hash === hash) renderRecipe(r.id);
+    }).catch(() => {
+      ceviriDurum[r.id] = "fail";
+      if (location.hash === hash) renderRecipe(r.id);
+    });
+  }
+
+  // ---------- Keşfet (dünya mutfağı) ----------
+  const ONE_CIKAN_MUTFAK = ["Turkish", "Italian", "Japanese", "Chinese", "Indian", "Mexican", "French", "Greek", "Spanish", "Thai",
+    "American", "British", "Moroccan", "Egyptian", "Tunisian", "Vietnamese", "Malaysian", "Jamaican", "Russian", "Polish", "Portuguese",
+    "Croatian", "Dutch", "Irish", "Canadian", "Filipino", "Kenyan", "Ukrainian"];
+  const KATEGORILER = ["Chicken", "Beef", "Lamb", "Seafood", "Pasta", "Vegetarian", "Vegan", "Dessert", "Breakfast", "Side", "Starter", "Miscellaneous"];
+  let kesfet = { tip: "mutfak", deger: "Turkish", q: "" };
+  let aramaZaman = null;
+
+  function renderExplore() {
+    setHeader("Dünya Mutfağı"); setTab("kesfet");
+    app.innerHTML = `
+      <form class="search" id="kform" role="search">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input id="kq" type="search" placeholder="Ara: tavuk, pasta, köri…" value="${esc(kesfet.q)}" autocomplete="off" enterkeyhint="search">
+      </form>
+      <button class="dice" id="rastgele"><span class="dice-face" aria-hidden="true">🎲</span><span><b>Bugün ne pişirsem?</b><small>Dünyadan rastgele bir tarif getir</small></span></button>
+      <div class="label">Mutfaklar</div>
+      <div class="chips" id="mutfaklar">${ONE_CIKAN_MUTFAK.map(a => `<button class="chip ${kesfet.tip === "mutfak" && kesfet.deger === a ? "active" : ""}" data-tip="mutfak" data-v="${a}">${esc(Dunya.mutfakTr(a))}</button>`).join("")}</div>
+      <div class="label">Kategoriler</div>
+      <div class="chips" id="kategoriler">${KATEGORILER.map(c => `<button class="chip ${kesfet.tip === "kategori" && kesfet.deger === c ? "active" : ""}" data-tip="kategori" data-v="${c}">${esc(Dunya.kategoriTr(c))}</button>`).join("")}</div>
+      <div class="result-head" id="baslik"></div>
+      <div class="grid" id="sonuc"></div>`;
+
+    const yukle = () => {
+      const kutu = $("#sonuc");
+      if (!kutu) return;
+      const baslik = kesfet.tip === "ara" ? `"${kesfet.q}" için sonuçlar`
+        : kesfet.tip === "mutfak" ? `${Dunya.mutfakTr(kesfet.deger)} mutfağı` : Dunya.kategoriTr(kesfet.deger);
+      $("#baslik").textContent = baslik;
+      kutu.innerHTML = yukleniyor("Tarifler yükleniyor…");
+      const istek = kesfet.tip === "ara" ? Dunya.ara(kesfet.q)
+        : kesfet.tip === "mutfak" ? Dunya.mutfaga(kesfet.deger) : Dunya.kategoriye(kesfet.deger);
+      const anahtar = JSON.stringify(kesfet);
+      istek.then(liste => {
+        if (anahtar !== JSON.stringify(kesfet) || !document.body.contains(kutu)) return;
+        $("#baslik").textContent = `${baslik} · ${liste.length} tarif`;
+        kutu.innerHTML = liste.length ? liste.map(x => apiCardHTML(x)).join("")
+          : `<div class="empty"><span class="big">🔍</span>Sonuç yok. Başka bir kelime dene (İngilizce de olur).</div>`;
+        bindCards();
+        adlariGuncelle(kutu, liste);
+      }).catch(() => {
+        kutu.innerHTML = hataHTML("Tarifler yüklenemedi. İnternet bağlantını kontrol et.");
+        $("#retry").onclick = yukle;
+      });
+    };
+
+    const chipSec = btn => {
+      app.querySelectorAll("#mutfaklar .chip, #kategoriler .chip").forEach(x => x.classList.toggle("active", x === btn));
+    };
+    app.querySelectorAll("#mutfaklar .chip, #kategoriler .chip").forEach(ch => {
+      ch.onclick = () => {
+        kesfet = { tip: ch.dataset.tip, deger: ch.dataset.v, q: "" };
+        $("#kq").value = "";
+        chipSec(ch); yukle();
+      };
+    });
+    const aramaYap = () => {
+      const q = $("#kq").value.trim();
+      if (q.length < 2) return;
+      kesfet = { tip: "ara", deger: "", q };
+      chipSec(null); yukle();
+    };
+    $("#kform").onsubmit = e => { e.preventDefault(); clearTimeout(aramaZaman); aramaYap(); $("#kq").blur(); };
+    $("#kq").oninput = () => { clearTimeout(aramaZaman); aramaZaman = setTimeout(aramaYap, 700); };
+
+    $("#rastgele").onclick = async () => {
+      const btn = $("#rastgele");
+      btn.classList.add("rolling"); btn.disabled = true;
+      try {
+        const r = await Dunya.rastgele();
+        putApi(r);
+        location.hash = "#/r/" + encodeURIComponent(r.id);
+      } catch {
+        toast("Bağlantı yok, rastgele tarif getirilemedi");
+      } finally { btn.classList.remove("rolling"); btn.disabled = false; }
+    };
+
+    // Seçili çipi görünür yap
+    const aktif = app.querySelector(".chips .chip.active");
+    if (aktif) aktif.scrollIntoView({ block: "nearest", inline: "center" });
+    yukle();
+  }
+
+  // ---------- Dolabımda ne var ----------
+  let dolap = store.get("tarif.dolap", []);
+  const saveDolap = () => store.set("tarif.dolap", dolap);
+  const ONERILER = ["tavuk", "kıyma", "yumurta", "domates", "patates", "soğan", "peynir", "pirinç", "makarna", "süt", "mantar", "biber", "patlıcan", "un", "yoğurt", "somon"];
+
+  function renderDolap() {
+    setHeader("Dolabımda ne var?"); setTab("dolap");
+    const oneriler = ONERILER.filter(o => !dolap.some(d => Besin.norm(d) === Besin.norm(o)));
+    app.innerHTML = `
+      <p class="lead">Evde olan malzemeleri ekle, onlarla yapabileceğin tarifleri bulalım.</p>
+      <form class="add-row" id="dform">
+        <input id="dq" placeholder="Malzeme yaz, örn. ıspanak" autocomplete="off" enterkeyhint="done" maxlength="30">
+        <button class="btn" type="submit">Ekle</button>
+      </form>
+      <div class="chips wrap" id="secili">${dolap.length
+        ? dolap.map((d, i) => `<button class="chip active" data-i="${i}" aria-label="${esc(d)} çıkar">${esc(d)} <span aria-hidden="true">×</span></button>`).join("")
+        : `<span class="hint">Henüz malzeme eklemedin.</span>`}</div>
+      ${oneriler.length ? `<div class="label">Hızlı ekle</div>
+      <div class="chips wrap" id="oneri">${oneriler.map(o => `<button class="chip" data-o="${esc(o)}">+ ${esc(o)}</button>`).join("")}</div>` : ""}
+      <button class="btn find" id="bul" ${dolap.length ? "" : "disabled"}>${dolap.length ? `${dolap.length} malzemeyle tarif bul` : "Önce malzeme ekle"}</button>
+      <div id="dsonuc"></div>`;
+
+    const ekle = ad => {
+      ad = ad.trim().toLocaleLowerCase("tr");
+      if (!ad) return;
+      if (dolap.some(d => Besin.norm(d) === Besin.norm(ad))) { toast("Bu malzeme zaten listede"); return; }
+      if (dolap.length >= 8) { toast("En fazla 8 malzeme ekleyebilirsin"); return; }
+      dolap.push(ad); saveDolap(); renderDolap(); $("#dq").focus();
+    };
+    $("#dform").onsubmit = e => { e.preventDefault(); ekle($("#dq").value); };
+    app.querySelectorAll("#secili .chip").forEach(c => { c.onclick = () => { dolap.splice(+c.dataset.i, 1); saveDolap(); renderDolap(); }; });
+    app.querySelectorAll("#oneri .chip").forEach(c => { c.onclick = () => ekle(c.dataset.o); });
+    $("#bul").onclick = () => dolapAra();
+  }
+
+  function dolapAra() {
+    const kutu = $("#dsonuc");
+    const secili = dolap.slice();
+    const rozet = n => `<span class="match ${n === secili.length ? "full" : ""}">✓ ${n}/${secili.length} malzeme</span>`;
+    const yerel = allRecipes()
+      .map(r => ({ r, e: Dunya.yerelEslesme(r, secili) }))
+      .filter(x => x.e.length)
+      .sort((a, b) => b.e.length - a.e.length);
+    kutu.innerHTML = `
+      <div class="result-head">Senin tariflerin</div>
+      <div class="grid">${yerel.length ? yerel.map(x => cardHTML(x.r, rozet(x.e.length))).join("") : `<p class="hint">Kendi tariflerinde eşleşen yok.</p>`}</div>
+      <div class="result-head" id="dbaslik">Dünya mutfağından</div>
+      <div class="grid" id="dgrid">${yukleniyor("Dünya tariflerinde aranıyor…")}</div>`;
+    bindCards();
+    kutu.scrollIntoView({ behavior: "smooth", block: "start" });
+    Dunya.dolaptan(secili).then(liste => {
+      const grid = $("#dgrid");
+      if (!grid) return;
+      grid.innerHTML = liste.length ? liste.map(x => apiCardHTML(x, rozet(x.eslesen.length))).join("")
+        : `<div class="empty">Dünya tariflerinde eşleşme bulunamadı.</div>`;
+      bindCards();
+      adlariGuncelle(grid, liste);
+    }).catch(() => {
+      $("#dgrid").innerHTML = hataHTML("Dünya tariflerine ulaşılamadı. İnternet bağlantını kontrol et.");
+      $("#retry").onclick = dolapAra;
+    });
   }
 
   // ---------- Tarif ekleme / düzenleme ----------
@@ -366,6 +612,8 @@
     if (h.startsWith("#/r/")) renderRecipe(decodeURIComponent(h.slice(4)));
     else if (h.startsWith("#/edit/")) renderForm(decodeURIComponent(h.slice(7)));
     else if (h === "#/favs") renderFavs();
+    else if (h === "#/kesfet") renderExplore();
+    else if (h === "#/dolap") renderDolap();
     else if (h === "#/add") renderForm(null);
     else renderList();
     window.scrollTo(0, 0);

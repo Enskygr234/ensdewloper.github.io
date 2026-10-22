@@ -199,3 +199,75 @@ main { padding: 12px 16px 24px; max-width: 640px; margin: 0 auto; }
   font-size: 14px; font-weight: 600; transition: .25s; max-width: calc(100% - 32px); text-align: center;
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ---------- Dünya mutfağı, dolap, besin değerleri ---------- */
+.thumb.photo { overflow: hidden; background: var(--surface-2); }
+.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.tabbar button span { white-space: nowrap; }
+@media (max-width: 360px) { .tabbar button { font-size: 11px; } }
+
+.hero.has-img { padding: 0 0 16px; overflow: hidden; }
+.hero-img { display: block; width: 100%; aspect-ratio: 4 / 3; max-height: 320px; object-fit: cover; margin-bottom: 4px; background: var(--surface-2); }
+.hero.has-img h2 { padding: 0 12px; }
+
+.note {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin-top: 12px; padding: 10px 14px; border-radius: 12px;
+  background: var(--surface); border: 1px solid var(--line); color: var(--muted); font-size: 14px;
+}
+.note button { margin-left: auto; border: 0; background: transparent; color: var(--accent); font-weight: 700; padding: 4px 0; }
+.note.warn { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+
+.nutri {
+  display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 8px; margin-top: 12px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px;
+}
+.nutri > div { display: flex; flex-direction: column; justify-content: center; text-align: center; padding: 6px 2px; border-radius: 10px; background: var(--surface-2); }
+.nutri .kcal { background: var(--accent-soft); }
+.nutri b { font-size: 18px; font-variant-numeric: tabular-nums; }
+.nutri .kcal b { font-size: 22px; color: var(--accent); }
+.nutri span { font-size: 11px; color: var(--muted); }
+.nutri p { grid-column: 1 / -1; margin: 2px 0 0; font-size: 12px; color: var(--muted); text-align: center; }
+@media (max-width: 380px) { .nutri { grid-template-columns: 1fr 1fr 1fr; } .nutri .kcal { grid-column: 1 / -1; } }
+
+.links { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+.links .btn { display: flex; align-items: center; justify-content: center; text-decoration: none; }
+
+.dice {
+  display: flex; align-items: center; gap: 14px; width: 100%; margin-top: 12px; text-align: left;
+  padding: 12px 14px; border-radius: var(--radius); border: 0;
+  background: var(--accent); color: #fff;
+}
+.dice b { display: block; font-size: 17px; }
+.dice small { display: block; opacity: .85; font-size: 13px; }
+.dice-face { font-size: 30px; line-height: 1; display: inline-block; }
+.dice.rolling .dice-face { animation: zar .5s linear infinite; }
+.dice:disabled { opacity: .8; }
+@keyframes zar { to { transform: rotate(360deg); } }
+
+.label { margin: 16px 0 0; font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.label + .chips { padding-top: 8px; }
+.chips.wrap { flex-wrap: wrap; overflow: visible; margin: 0; padding: 10px 0 0; }
+.chip span { opacity: .8; margin-left: 2px; }
+.result-head { margin: 22px 0 0; font-size: 17px; font-weight: 700; }
+.lead { margin: 4px 0 14px; color: var(--muted); }
+.hint { color: var(--muted); font-size: 14px; }
+.add-row { display: flex; gap: 8px; }
+.add-row input {
+  flex: 1; min-width: 0; height: 48px; border: 1px solid var(--line); background: var(--surface);
+  border-radius: 14px; padding: 0 14px; font-size: 16px; outline: none;
+}
+.add-row input:focus { border-color: var(--accent); }
+.add-row .btn { flex: none; }
+.btn.find { width: 100%; margin-top: 16px; }
+.btn:disabled { opacity: .5; }
+.match { display: inline-block; margin-top: 6px; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: var(--surface-2); color: var(--muted); }
+.match.full { background: color-mix(in srgb, var(--good) 18%, transparent); color: var(--good); }
+.retry { margin-top: 14px; flex: none; }
+
+.spinner {
+  display: block; width: 32px; height: 32px; margin: 0 auto 12px; border-radius: 50%;
+  border: 3px solid var(--line); border-top-color: var(--accent); animation: zar .8s linear infinite;
+}
+.spinner.small { display: inline-block; width: 16px; height: 16px; margin: 0; border-width: 2px; }
+@media (prefers-reduced-motion: reduce) { .spinner, .dice.rolling .dice-face { animation-duration: 2s; } }
