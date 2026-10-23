@@ -7,7 +7,7 @@
 <meta name="description" content="Winterdeveloper'ın oyunları, Android uygulamaları, Windows araçları ve web projeleri. Hepsi ücretsiz indir veya tarayıcıda aç.">
 <meta name="theme-color" content="#070b16">
 <meta property="og:title" content="Winterdeveloper">
-<meta property="og:description" content="39 proje: oyunlar, Android uygulamaları, Windows araçları ve web projeleri.">
+<meta property="og:description" content="Oyunlar, Android uygulamaları, Windows araçları ve web projeleri. Ücretsiz indir.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❄️</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -114,14 +114,10 @@ footer a:hover{color:var(--ice)}
 <div class="wrap">
   <nav>
     <a class="logo" href="#"><span class="flake">❄</span>Winterdeveloper</a>
-    <a class="nav-gh" href="https://github.com/Enskygr234" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.2.5-2.3 1.2-3.1-.1-.4-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.2.8.8 1.2 1.9 1.2 3.1 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5Z"/></svg>
-      GitHub
-    </a>
   </nav>
 
   <header>
-    <div class="tag"><i></i>Hepsi ücretsiz, hepsi açık kaynak</div>
+    <div class="tag"><i></i>Hepsi ücretsiz, hemen indir</div>
     <h1>Winter<span>developer</span></h1>
     <p class="lead">Oyunlar, Android uygulamaları, Windows araçları ve web projeleri. İstediğini indir ya da tarayıcıda hemen aç.</p>
     <div class="stats" id="stats"></div>
@@ -141,13 +137,13 @@ footer a:hover{color:var(--ice)}
 
   <footer>
     <span>❄ Winterdeveloper · Kış gelir, kod yazılır.</span>
-    <a href="https://github.com/Enskygr234" target="_blank" rel="noopener">github.com/Enskygr234</a>
+    <span>Tüm hakları saklıdır © 2026</span>
   </footer>
 </div>
 
 <script src="projects.js"></script>
 <script>
-const P = window.P || [];
+const P = (window.P || []).filter(p => p.dl.length || p.web);
 const CATS = [["all","Tümü"],["game","Oyunlar"],["app","Uygulamalar"],["tool","Windows araçları"],["web","Web"],["android","Android'e indir"],["windows","Windows'a indir"]];
 const CAT_NAME = {game:"Oyun",app:"Uygulama",tool:"Araç",web:""};
 const I = {
@@ -185,12 +181,11 @@ chips.addEventListener("click", e => {
 function card(p, i){
   const dls = p.dl.map(d => `<a class="btn dl" href="${esc(d.url)}" download>${I.dl}${esc(d.name || d.kind)} <small>${size(d.mb)}</small></a>`).join("");
   const web = p.web ? `<a class="btn" href="${esc(p.web)}" target="_blank" rel="noopener">${I.web}${p.dl.length ? "Web'de aç" : "Aç"}</a>` : "";
-  const code = `<a class="btn" href="${esc(p.repo)}" target="_blank" rel="noopener">${I.code}Kod</a>`;
   const badges = [CAT_NAME[p.cat] ? `<span class="badge">${CAT_NAME[p.cat]}</span>` : "", ...platforms(p).map(k => `<span class="badge ${k}">${k}</span>`), p.lang ? `<span class="badge">${esc(p.lang)}</span>` : ""].join("");
   return `<article class="card" style="animation-delay:${Math.min(i,12)*40}ms">
     <div class="top"><div class="ic">${p.icon}</div><div><h3>${esc(p.title)}</h3><div class="meta">${badges}</div></div></div>
     <p class="desc">${esc(p.desc)}</p>
-    <div class="acts">${dls}${web}${code}</div>
+    <div class="acts">${dls}${web}</div>
   </article>`;
 }
 
