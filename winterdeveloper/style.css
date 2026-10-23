@@ -1,3 +1,4 @@
+html:not(.ok) body{visibility:hidden}
 :root{
   --bg:#070b16; --bg2:#0c1324; --card:#0f1830; --card2:#13203d; --line:#1e2c4d;
   --text:#e8eefc; --muted:#8fa0c4; --ice:#7dd3fc; --ice2:#a5b4fc; --glow:rgba(125,211,252,.18);
