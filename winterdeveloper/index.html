@@ -2,118 +2,26 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Winterdeveloper</title>
 <meta name="description" content="Winterdeveloper'ın oyunları, Android uygulamaları, Windows araçları ve web projeleri. Hepsi ücretsiz indir veya tarayıcıda aç.">
 <meta name="theme-color" content="#070b16">
 <meta property="og:title" content="Winterdeveloper">
 <meta property="og:description" content="Oyunlar, Android uygulamaları, Windows araçları ve web projeleri. Ücretsiz indir.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❄️</text></svg>">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#070b16; --bg2:#0c1324; --card:#0f1830; --card2:#13203d; --line:#1e2c4d;
-  --text:#e8eefc; --muted:#8fa0c4; --ice:#7dd3fc; --ice2:#a5b4fc; --glow:rgba(125,211,252,.18);
-  --android:#4ade80; --windows:#60a5fa; --web:#f0abfc; --mc:#fbbf24;
-  --r:18px;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{background:var(--bg);color:var(--text);font:15px/1.55 Inter,system-ui,sans-serif;min-height:100vh;overflow-x:hidden}
-a{color:inherit;text-decoration:none}
-#snow{position:fixed;inset:0;pointer-events:none;z-index:0}
-.wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 20px}
-.aurora{position:fixed;inset:-20% 0 auto;height:70vh;z-index:0;pointer-events:none;
-  background:radial-gradient(40% 50% at 25% 30%,rgba(56,189,248,.16),transparent 70%),radial-gradient(35% 45% at 75% 20%,rgba(129,140,248,.16),transparent 70%);filter:blur(10px)}
-
-/* nav */
-nav{display:flex;align-items:center;justify-content:space-between;padding:22px 0}
-.logo{display:flex;align-items:center;gap:10px;font:700 19px "Space Grotesk",sans-serif;letter-spacing:-.01em}
-.logo .flake{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(135deg,#38bdf8,#818cf8);font-size:18px;box-shadow:0 0 24px var(--glow)}
-.nav-gh{display:flex;align-items:center;gap:8px;color:var(--muted);font-weight:500;font-size:14px;padding:9px 14px;border:1px solid var(--line);border-radius:999px;transition:.2s}
-.nav-gh:hover{color:var(--text);border-color:var(--ice)}
-.nav-gh svg{width:17px;height:17px;fill:currentColor}
-
-/* hero */
-header{padding:56px 0 40px;text-align:center}
-.tag{display:inline-flex;gap:8px;align-items:center;font-size:13px;color:var(--ice);background:rgba(125,211,252,.08);border:1px solid rgba(125,211,252,.25);padding:6px 14px;border-radius:999px;margin-bottom:22px}
-.tag i{width:7px;height:7px;border-radius:50%;background:var(--android);box-shadow:0 0 10px var(--android);animation:pulse 2s infinite}
-@keyframes pulse{50%{opacity:.35}}
-h1{font:700 clamp(40px,9vw,84px)/1 "Space Grotesk",sans-serif;letter-spacing:-.035em;
-  background:linear-gradient(180deg,#fff 20%,#9cc8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
-h1 span{background:linear-gradient(90deg,#7dd3fc,#a5b4fc,#7dd3fc);background-size:200%;-webkit-background-clip:text;background-clip:text;animation:shine 6s linear infinite}
-@keyframes shine{to{background-position:200%}}
-.lead{max-width:580px;margin:18px auto 0;color:var(--muted);font-size:17px}
-.stats{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:34px}
-.stat{min-width:120px;padding:14px 18px;border:1px solid var(--line);border-radius:16px;background:rgba(15,24,48,.6);backdrop-filter:blur(8px)}
-.stat b{display:block;font:700 28px "Space Grotesk",sans-serif}
-.stat small{color:var(--muted);font-size:13px}
-
-/* controls */
-.controls{position:sticky;top:0;z-index:5;padding:14px 0;margin:10px 0 18px;background:linear-gradient(var(--bg) 70%,transparent)}
-.controls-in{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-.controls-in>*{min-width:0;max-width:100%}
-.search{flex:1 1 240px;display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0 14px;transition:.2s}
-.search:focus-within{border-color:var(--ice);box-shadow:0 0 0 3px var(--glow)}
-.search svg{width:18px;height:18px;stroke:var(--muted);fill:none;stroke-width:2;flex:none}
-.search input{flex:1;background:none;border:0;outline:0;color:var(--text);font:inherit;padding:12px 0;min-width:0}
-.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px}
-.chips::-webkit-scrollbar{display:none}
-.chip{flex:none;border:1px solid var(--line);background:var(--card);color:var(--muted);font:500 14px Inter,sans-serif;padding:10px 15px;border-radius:12px;cursor:pointer;transition:.2s;white-space:nowrap}
-.chip:hover{color:var(--text)}
-.chip.on{background:linear-gradient(135deg,#38bdf8,#818cf8);border-color:transparent;color:#06101f;font-weight:600}
-.chip em{font-style:normal;opacity:.7;margin-left:4px;font-size:12px}
-
-/* grid */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;padding-bottom:40px}
-.card{position:relative;display:flex;flex-direction:column;gap:14px;padding:20px;border-radius:var(--r);
-  background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);transition:transform .25s,border-color .25s,box-shadow .25s;
-  opacity:0;transform:translateY(14px);animation:rise .5s forwards}
-@keyframes rise{to{opacity:1;transform:none}}
-.card:hover{border-color:rgba(125,211,252,.45);box-shadow:0 12px 40px -12px rgba(56,189,248,.35)}
-.top{display:flex;gap:14px;align-items:flex-start}
-.ic{flex:none;width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-size:26px;background:rgba(125,211,252,.08);border:1px solid rgba(125,211,252,.18)}
-.card h3{font:700 18px/1.25 "Space Grotesk",sans-serif;letter-spacing:-.01em}
-.meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
-.badge{font-size:11.5px;font-weight:600;padding:3px 8px;border-radius:7px;background:rgba(255,255,255,.05);color:var(--muted)}
-.badge.Android{color:var(--android);background:rgba(74,222,128,.1)}
-.badge.Windows{color:var(--windows);background:rgba(96,165,250,.1)}
-.badge.Web{color:var(--web);background:rgba(240,171,252,.1)}
-.badge.Minecraft{color:var(--mc);background:rgba(251,191,36,.1)}
-.desc{color:var(--muted);font-size:14.5px;flex:1}
-.acts{display:flex;gap:8px;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;gap:7px;font:600 13.5px Inter,sans-serif;padding:10px 14px;border-radius:11px;border:1px solid var(--line);color:var(--text);background:rgba(255,255,255,.03);transition:.2s;cursor:pointer}
-.btn:hover{border-color:var(--ice);background:rgba(125,211,252,.08)}
-.btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-.btn.dl{background:linear-gradient(135deg,#38bdf8,#818cf8);border-color:transparent;color:#06101f}
-.btn.dl:hover{filter:brightness(1.1)}
-.btn small{font-weight:500;opacity:.75}
-.empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:60px 0}
-
-footer{border-top:1px solid var(--line);padding:30px 0 40px;color:var(--muted);font-size:14px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-footer a:hover{color:var(--ice)}
-
-@media (max-width:640px){
-  .wrap{padding:0 16px}
-  header{padding:30px 0 26px}
-  .lead{font-size:15.5px}
-  .stat{min-width:0;flex:1 1 40%;padding:12px}
-  .stat b{font-size:24px}
-  .grid{grid-template-columns:1fr}
-  .controls-in{flex-direction:column;align-items:stretch}
-  .search{flex:none}
-}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.card{opacity:1;transform:none}}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <canvas id="snow"></canvas>
 <div class="aurora"></div>
 <div class="wrap">
   <nav>
-    <a class="logo" href="#"><span class="flake">❄</span>Winterdeveloper</a>
+    <a class="logo" href="./"><span class="flake">❄</span>Winterdeveloper</a>
   </nav>
 
   <header>
@@ -142,79 +50,6 @@ footer a:hover{color:var(--ice)}
 </div>
 
 <script src="projects.js"></script>
-<script>
-const P = (window.P || []).filter(p => p.dl.length || p.web);
-const CATS = [["all","Tümü"],["game","Oyunlar"],["app","Uygulamalar"],["tool","Windows araçları"],["web","Web"],["android","Android'e indir"],["windows","Windows'a indir"]];
-const CAT_NAME = {game:"Oyun",app:"Uygulama",tool:"Araç",web:""};
-const I = {
-  dl:'<svg viewBox="0 0 24 24"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg>',
-  web:'<svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>',
-  code:'<svg viewBox="0 0 24 24"><path d="m8 7-5 5 5 5m8-10 5 5-5 5"/></svg>'
-};
-const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const size = mb => mb < 0.1 ? "<0,1 MB" : mb.toLocaleString("tr-TR",{maximumFractionDigits:1}) + " MB";
-const platforms = p => { const s = new Set(p.dl.map(d => d.kind)); if (p.web) s.add("Web"); return [...s]; };
-
-P.sort((a,b) => (a.id==="ensdewloper.github.io")-(b.id==="ensdewloper.github.io") || (b.dl.length>0)-(a.dl.length>0) || new Date(b.updated)-new Date(a.updated));
-
-const count = f => P.filter(f).length;
-const filters = {
-  all: () => true, game: p => p.cat==="game", app: p => p.cat==="app", tool: p => p.cat==="tool", web: p => p.cat==="web",
-  android: p => p.dl.some(d => d.kind==="Android"), windows: p => p.dl.some(d => d.kind==="Windows")
-};
-document.getElementById("stats").innerHTML = [
-  [P.length,"proje"],[count(filters.game),"oyun"],[count(filters.android),"Android uygulaması"],[count(filters.windows),"Windows programı"]
-].map(([n,t]) => `<div class="stat"><b>${n}</b><small>${t}</small></div>`).join("");
-
-let cat = "all";
-try { const s = localStorage.getItem("wd-cat"); if (s && filters[s]) cat = s; } catch(e) {}
-const chips = document.getElementById("chips");
-function drawChips(){
-  chips.innerHTML = CATS.map(([k,t]) => `<button class="chip${k===cat?" on":""}" data-k="${k}">${t}<em>${count(filters[k])}</em></button>`).join("");
-}
-chips.addEventListener("click", e => {
-  const b = e.target.closest(".chip"); if (!b) return;
-  cat = b.dataset.k; try { localStorage.setItem("wd-cat", cat); } catch(e) {}
-  drawChips(); render();
-});
-
-function card(p, i){
-  const dls = p.dl.map(d => `<a class="btn dl" href="${esc(d.url)}" download>${I.dl}${esc(d.name || d.kind)} <small>${size(d.mb)}</small></a>`).join("");
-  const web = p.web ? `<a class="btn" href="${esc(p.web)}" target="_blank" rel="noopener">${I.web}${p.dl.length ? "Web'de aç" : "Aç"}</a>` : "";
-  const badges = [CAT_NAME[p.cat] ? `<span class="badge">${CAT_NAME[p.cat]}</span>` : "", ...platforms(p).map(k => `<span class="badge ${k}">${k}</span>`), p.lang ? `<span class="badge">${esc(p.lang)}</span>` : ""].join("");
-  return `<article class="card" style="animation-delay:${Math.min(i,12)*40}ms">
-    <div class="top"><div class="ic">${p.icon}</div><div><h3>${esc(p.title)}</h3><div class="meta">${badges}</div></div></div>
-    <p class="desc">${esc(p.desc)}</p>
-    <div class="acts">${dls}${web}</div>
-  </article>`;
-}
-
-const grid = document.getElementById("grid"), q = document.getElementById("q");
-const norm = s => s.toLocaleLowerCase("tr-TR");
-function render(){
-  const t = norm(q.value.trim());
-  const list = P.filter(filters[cat]).filter(p => !t || norm(p.title + " " + p.desc + " " + (p.lang||"") + " " + platforms(p).join(" ")).includes(t));
-  grid.innerHTML = list.length ? list.map(card).join("") : `<div class="empty">“${esc(q.value)}” için proje bulunamadı.</div>`;
-}
-q.addEventListener("input", render);
-drawChips(); render();
-
-/* kar yağışı */
-(() => {
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  const c = document.getElementById("snow"), x = c.getContext("2d");
-  let W, H, F = [];
-  const fit = () => { const d = Math.min(devicePixelRatio||1, 2); W = c.width = innerWidth*d; H = c.height = innerHeight*d; c.style.width = innerWidth+"px"; c.style.height = innerHeight+"px";
-    const n = Math.round(Math.min(110, innerWidth/12)); F = Array.from({length:n}, () => ({x:Math.random()*W, y:Math.random()*H, r:(Math.random()*1.8+.6)*d, s:(Math.random()*.6+.3)*d, w:Math.random()*6.28, o:Math.random()*.5+.3})); };
-  fit(); addEventListener("resize", fit);
-  (function f(){
-    x.clearRect(0,0,W,H);
-    for (const p of F) { p.y += p.s; p.w += .01; p.x += Math.sin(p.w)*.4;
-      if (p.y > H) { p.y = -5; p.x = Math.random()*W; }
-      x.globalAlpha = p.o; x.fillStyle = "#fff"; x.beginPath(); x.arc(p.x,p.y,p.r,0,6.283); x.fill(); }
-    requestAnimationFrame(f);
-  })();
-})();
-</script>
+<script src="app.js"></script>
 </body>
 </html>
