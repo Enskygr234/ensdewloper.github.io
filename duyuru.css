@@ -1,0 +1,17 @@
+/* Duyuru kartı (duyuru.js) — iki sitenin koyu kış temasına uyar */
+.duyuru-yigin{position:fixed;z-index:150;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;
+  padding:0 max(12px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+.duyuru-kart{pointer-events:auto;width:100%;max-width:560px;display:flex;align-items:flex-start;gap:12px;padding:12px 10px 12px 14px;border-radius:14px;
+  background:rgba(10,20,44,.94);color:#eaf2ff;border:1px solid rgba(150,210,255,.3);box-shadow:0 18px 40px -18px rgba(0,0,0,.9);
+  font:15px/1.5 "Onest",system-ui,sans-serif;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);animation:duyuru-gel .5s cubic-bezier(.2,.8,.2,1) both}
+.duyuru-ikon{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:14px;background:#7fd4ff;color:#06121f;margin-top:1px}
+.duyuru-onemli{border-color:rgba(255,181,71,.55)} .duyuru-onemli .duyuru-ikon{background:#ffb547;color:#2a1700}
+.duyuru-kutlama{border-color:rgba(94,242,194,.5)} .duyuru-kutlama .duyuru-ikon{background:#5ef2c2;color:#052a1e}
+.duyuru-govde{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.duyuru-govde p{margin:0;overflow-wrap:anywhere}
+.duyuru-govde a{color:#7fd4ff;font-weight:600;text-underline-offset:3px;align-self:flex-start}
+.duyuru-kapat{flex:none;width:32px;height:32px;border:0;border-radius:8px;background:transparent;color:#98a8c8;font:22px/1 system-ui,sans-serif;cursor:pointer}
+.duyuru-kapat:hover{background:rgba(255,255,255,.08);color:#fff}
+.duyuru-kapat:focus-visible{outline:2px solid #ffb547;outline-offset:2px}
+@keyframes duyuru-gel{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.duyuru-kart{animation:none}}

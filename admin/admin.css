@@ -1,0 +1,88 @@
+/* Layout: tek sütunlu yönetim masası — üstte site sekmeleri, ortada duyuru listesi, altta yayın çubuğu ve geçmiş.
+   Sitelerle aynı kış gecesi; kasıtlı olarak yalnızca koyu tema. */
+:root{
+  --zemin:#060c1d; --yuzey:#0f1a36; --yuzey-2:#16244a; --metin:#eaf2ff; --soluk:#98a8c8; --cizgi:rgba(150,195,255,.16);
+  --buz:#7fd4ff; --fener:#ffb547; --fener-metin:#2a1700; --yesil:#5ef2c2; --kirmizi:#ff8a80;
+  --govde:"Onest",system-ui,sans-serif; --kod:"JetBrains Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--zemin);color:var(--metin);font:16px/1.55 var(--govde)}
+a{color:var(--buz);text-underline-offset:3px}
+h1,h2{margin:0;line-height:1.15;text-wrap:balance}
+h1{font-size:28px} h2{font-size:19px}
+p{margin:0}
+code{font-family:var(--kod);font-size:13px;background:var(--yuzey-2);padding:1px 5px;border-radius:5px}
+.soluk{color:var(--soluk)}
+:focus-visible{outline:2px solid var(--fener);outline-offset:2px}
+
+.ust{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:rgba(6,12,29,.92);border-bottom:1px solid var(--cizgi);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--zemin)}
+.ust-ic,.sar{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.ust-ic{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px}
+.logo{font-weight:700;color:var(--metin);text-decoration:none;letter-spacing:.02em}
+.kim{display:flex;align-items:center;gap:8px;min-width:0}
+.kim img{border-radius:50%;flex:none}
+.kim span{font-size:14px;color:var(--soluk);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sar{padding-block:24px 64px;display:flex;flex-direction:column;gap:18px}
+#panel{display:flex;flex-direction:column;gap:18px}
+#panel[hidden],.giris[hidden]{display:none}
+.giris{display:flex;flex-direction:column;gap:16px}
+
+.adimlar{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px;color:var(--soluk)}
+.adimlar b{color:var(--metin);font-weight:600}
+
+.kart{background:var(--yuzey);border:1px solid var(--cizgi);border-radius:14px;padding:16px}
+.form{display:flex;flex-direction:column;gap:8px}
+.form h2{margin-bottom:4px}
+label{font-size:14px;font-weight:600;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.sayac{font:500 12px var(--kod);color:var(--soluk);font-variant-numeric:tabular-nums}
+input[type=text],input[type=url],input[type=password],input[type=date],textarea,select{
+  width:100%;font:inherit;color:var(--metin);background:var(--zemin);border:1px solid var(--cizgi);border-radius:10px;padding:10px 12px;min-width:0}
+textarea{resize:vertical}
+input:focus,textarea:focus,select:focus{border-color:var(--buz);outline:none}
+.kutu{justify-content:flex-start;font-weight:500;gap:8px;align-items:center;margin-top:4px}
+.kutu input{width:18px;height:18px;accent-color:var(--fener)}
+.ikili{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ikili>div{display:flex;flex-direction:column;gap:6px;min-width:0}
+.hata{color:var(--kirmizi);font-size:14px}
+.dugmeler{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+
+.dugme{font:600 15px var(--govde);border-radius:10px;padding:10px 16px;cursor:pointer;border:1px solid var(--cizgi);background:var(--yuzey-2);color:var(--metin)}
+.dugme:hover{border-color:rgba(150,210,255,.4)}
+.dugme.ana{background:var(--fener);border-color:var(--fener);color:var(--fener-metin)}
+.dugme.ana:hover{background:#ffc56e}
+.dugme.hafif{background:transparent}
+.dugme.kucuk{font-size:13px;padding:6px 10px}
+.dugme.tehlike{color:var(--kirmizi)}
+.dugme:disabled{opacity:.55;cursor:wait}
+
+.sekmeler{display:flex;gap:6px;flex-wrap:wrap}
+.sekme{font:600 14px var(--govde);padding:8px 14px;border-radius:999px;border:1px solid var(--cizgi);background:transparent;color:var(--soluk);cursor:pointer}
+.sekme[aria-selected=true]{background:var(--buz);border-color:var(--buz);color:#06121f}
+.baslik-satir{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.baslik-satir>div{min-width:0}
+.durum{font-size:14px;color:var(--soluk);min-height:1.5em}
+.durum.iyi{color:var(--yesil)} .durum.kotu{color:var(--kirmizi)}
+
+.liste,.gecmis{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.oge{display:flex;flex-direction:column;gap:8px;background:var(--yuzey);border:1px solid var(--cizgi);border-left:4px solid var(--buz);border-radius:0 12px 12px 0;padding:12px 14px}
+.oge.onemli{border-left-color:var(--fener)} .oge.kutlama{border-left-color:var(--yesil)}
+.oge p{overflow-wrap:anywhere}
+.ust-bilgi{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--soluk)}
+.rozet{font:600 12px var(--govde);padding:2px 8px;border-radius:999px;border:1px solid currentColor}
+.rozet.yayinda{color:var(--yesil)} .rozet.plan{color:var(--buz)} .rozet.bitti,.rozet.kapali{color:var(--soluk)}
+.tarih{font-family:var(--kod);font-size:12px;font-variant-numeric:tabular-nums}
+.oge-link{font-size:14px}
+.oge .dugmeler{margin-top:0}
+.bos{color:var(--soluk);padding:20px;text-align:center;border:1px dashed var(--cizgi);border-radius:12px}
+
+.yayin{position:sticky;bottom:0;background:var(--yuzey-2);border:1px solid var(--fener);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;
+  margin-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -10px 30px -10px rgba(0,0,0,.8)}
+.yayin[hidden]{display:none}
+.ara-baslik{margin-top:12px}
+.gecmis li{display:flex;gap:10px;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--cizgi);padding-bottom:8px;font-size:14px}
+.gecmis li a{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--metin);text-decoration:none}
+.gecmis li a:hover{color:var(--buz)}
+.gecmis time{flex:none;color:var(--soluk);font:12px var(--kod)}
+@media (max-width:480px){.ikili{grid-template-columns:1fr}h1{font-size:24px}}
