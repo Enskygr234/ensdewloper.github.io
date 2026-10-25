@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https://avatars.githubusercontent.com; connect-src https://api.github.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Site Yönetimi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<header class="ust">
+  <div class="ust-ic">
+    <a class="logo" href="../">❄ Yönetim</a>
+    <div class="kim" id="kim" hidden>
+      <img id="kimFoto" alt="" width="28" height="28">
+      <span id="kimAd"></span>
+      <button class="dugme hafif kucuk" id="cikis" type="button">Çıkış</button>
+    </div>
+  </div>
+</header>
+
+<main class="sar">
+  <!-- Giriş -->
+  <section class="giris" id="girisEkrani">
+    <h1>Site yönetimi</h1>
+    <p class="soluk">Duyuruları buradan ekleyip siteye yayınlarsın. Giriş için GitHub'da sadece bu iki siteye yazabilen bir anahtar (token) oluştur. Anahtar bu sayfanın koduna yazılmaz, yalnızca senin tarayıcında durur.</p>
+    <ol class="adimlar">
+      <li><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">GitHub'da yeni ince ayarlı anahtar oluştur</a></li>
+      <li><b>Repository access:</b> "Only select repositories" seç, <code>enskygr234.github.io</code> ve <code>ensdewloper.github.io</code> depolarını ekle.</li>
+      <li><b>Permissions → Contents:</b> "Read and write" yap. Başka izin verme.</li>
+      <li>Oluşan anahtarı aşağıya yapıştır.</li>
+    </ol>
+    <form id="girisForm" class="kart form" novalidate>
+      <label for="token">GitHub anahtarı</label>
+      <input id="token" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
+      <label class="kutu"><input id="hatirla" type="checkbox"> Bu cihazda beni hatırla</label>
+      <p class="hata" id="girisHata" role="alert" hidden></p>
+      <button class="dugme ana" id="girisDugme" type="submit">Giriş yap</button>
+    </form>
+  </section>
+
+  <!-- Panel -->
+  <section id="panel" hidden>
+    <div class="sekmeler" id="sekmeler" role="tablist" aria-label="Site"></div>
+
+    <div class="baslik-satir">
+      <div>
+        <h1 id="siteAd">Duyurular</h1>
+        <p class="soluk"><a id="siteLink" href="#" target="_blank" rel="noopener noreferrer"></a></p>
+      </div>
+      <button class="dugme ana" id="yeniDugme" type="button">+ Yeni duyuru</button>
+    </div>
+
+    <p class="durum" id="durum" role="status"></p>
+
+    <form class="kart form" id="duzenle" hidden novalidate>
+      <h2 id="duzenleBaslik">Yeni duyuru</h2>
+      <label for="fMetin">Metin <span class="sayac" id="fSayac">0 / 280</span></label>
+      <textarea id="fMetin" rows="3" maxlength="280" placeholder="Örn. Yeni oyun Son Vardiya çıktı, hemen dene!"></textarea>
+      <div class="ikili">
+        <div><label for="fTur">Tür</label>
+          <select id="fTur"><option value="bilgi">Bilgi (mavi)</option><option value="onemli">Önemli (turuncu)</option><option value="kutlama">Kutlama (yeşil)</option></select></div>
+        <div><label for="fLinkAdi">Bağlantı yazısı</label><input id="fLinkAdi" type="text" maxlength="40" placeholder="Ayrıntılar"></div>
+      </div>
+      <label for="fLink">Bağlantı (isteğe bağlı)</label>
+      <input id="fLink" type="url" placeholder="https://…">
+      <div class="ikili">
+        <div><label for="fBas">Başlangıç</label><input id="fBas" type="date"></div>
+        <div><label for="fBit">Bitiş</label><input id="fBit" type="date"></div>
+      </div>
+      <label class="kutu"><input id="fAktif" type="checkbox" checked> Aktif</label>
+      <p class="hata" id="formHata" role="alert" hidden></p>
+      <div class="dugmeler">
+        <button class="dugme ana" type="submit">Listeye ekle</button>
+        <button class="dugme hafif" id="vazgec" type="button">Vazgeç</button>
+      </div>
+    </form>
+
+    <ul class="liste" id="liste"></ul>
+
+    <div class="yayin" id="yayin" hidden>
+      <p><b>Kaydedilmemiş değişiklik var.</b> Yayınlayınca siteye 1–2 dakika içinde gelir.</p>
+      <div class="dugmeler">
+        <button class="dugme ana" id="yayinla" type="button">Kaydet ve yayınla</button>
+        <button class="dugme hafif" id="geriAl" type="button">Geri al</button>
+      </div>
+    </div>
+
+    <h2 class="ara-baslik">Son değişiklikler</h2>
+    <ul class="gecmis" id="gecmis"></ul>
+  </section>
+</main>
+<script src="admin.js"></script>
+</body>
+</html>
